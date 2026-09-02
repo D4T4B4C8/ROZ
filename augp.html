@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>August Purchases</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141110;
+    --panel-line:#3a3128;
+    --gold:#cda653;
+    --gold-soft:#e8d5a3;
+    --cream:#f3ecdd;
+    --cream-dim:#a99f8d;
+    --credit:#6b9e78;
+    --row-size:1rem;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; min-height:100vh;
+    font-family:'Poppins', sans-serif;
+    background: radial-gradient(circle at 50% -10%, #2a221b 0%, var(--ink) 55%), var(--ink);
+    color:var(--cream);
+    padding:40px 20px 80px;
+  }
+  .topbar{
+    max-width:900px; margin:0 auto 10px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .back-link{
+    font-size:0.82rem; letter-spacing:0.04em; color:var(--cream-dim);
+    text-decoration:none; border:1px solid var(--panel-line);
+    padding:8px 16px; border-radius:999px;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .back-link:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .zoom-controls{ display:flex; gap:6px; }
+  .zoom-controls button{
+    font-family:'Poppins', sans-serif; font-size:0.78rem; font-weight:500;
+    color:var(--gold-soft); background:#1d1815; border:1px solid var(--panel-line);
+    padding:8px 14px; border-radius:999px; cursor:pointer;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .zoom-controls button:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .page-title{ max-width:900px; margin:0 auto 6px; text-align:center; }
+  .page-title h1{
+    font-family:'Cormorant Garamond', serif; font-weight:600;
+    font-size:clamp(1.9rem, 4.2vw, 2.5rem); color:var(--gold-soft); margin:0 0 6px;
+  }
+  .page-title p{ margin:0; font-size:0.8rem; letter-spacing:0.14em; color:var(--cream-dim); }
+  .summary-strip{
+    max-width:900px; margin:26px auto 34px; display:flex;
+    justify-content:center; gap:14px; flex-wrap:wrap;
+  }
+  .summary-pill{
+    border:1px solid var(--panel-line); border-radius:14px; padding:12px 22px;
+    background:linear-gradient(160deg, #201a15, #171310); text-align:center; min-width:120px;
+  }
+  .summary-pill .label{ font-size:0.68rem; letter-spacing:0.1em; color:var(--cream-dim); margin-bottom:4px; }
+  .summary-pill .value{
+    font-family:'Cormorant Garamond', serif; font-size:1.3rem; font-weight:600; color:var(--gold-soft);
+  }
+  .section-heading{
+    max-width:900px; margin:26px auto 8px; padding:0 4px;
+    font-family:'Cormorant Garamond', serif; font-weight:600; font-size:1.2rem; color:var(--gold-soft);
+  }
+  .ledger{
+    max-width:900px; margin:0 auto 18px;
+    background:linear-gradient(160deg, #201a15, #171310);
+    border:1px solid var(--panel-line); border-radius:20px; padding:8px 0 0;
+    box-shadow:0 14px 30px -18px rgba(0,0,0,0.75); overflow:auto;
+  }
+  table{ width:100%; border-collapse:collapse; font-size:var(--row-size); }
+  thead th{
+    font-size:0.72rem; letter-spacing:0.08em; color:var(--cream-dim); font-weight:500;
+    text-align:left; padding:14px 18px; border-bottom:1px solid var(--panel-line); white-space:nowrap;
+  }
+  thead th.num, td.num{ text-align:right; }
+  tbody td{
+    padding:12px 18px; border-bottom:1px solid rgba(58,49,40,0.5);
+    font-variant-numeric:tabular-nums; color:var(--cream); white-space:nowrap;
+  }
+  tbody tr:last-of-type td{ border-bottom:none; }
+  tbody tr:nth-child(even){ background:rgba(243,236,221,0.02); }
+  tbody tr:hover{ background:rgba(205,166,83,0.06); }
+  td.credit{ color:var(--credit); }
+  td.empty{ text-align:center; color:var(--cream-dim); padding:22px; }
+  tfoot td{
+    padding:16px 18px; font-family:'Cormorant Garamond', serif; font-size:1.1rem;
+    font-weight:600; color:var(--gold-soft); border-top:1px solid var(--gold);
+    background:rgba(205,166,83,0.06);
+  }
+  @media (max-width:560px){
+    thead th, tbody td, tfoot td{ padding:10px 12px; }
+    .summary-pill{ min-width:100px; padding:10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a class="back-link" href="sp.html">&larr; Sales vs Purchases</a>
+    <div class="zoom-controls">
+      <button onclick="zoomOut()">A&minus;</button>
+      <button onclick="resetZoom()">Reset</button>
+      <button onclick="zoomIn()">A+</button>
+    </div>
+  </div>
+
+  <div class="page-title">
+    <h1>August Purchases</h1>
+    <p>Roz Jewellers &middot; Business Records</p>
+  </div>
+
+  <div class="summary-strip">
+    <div class="summary-pill"><div class="label">ENTRIES</div><div class="value">166</div></div>
+    <div class="summary-pill"><div class="label">TOTAL</div><div class="value">₹161,525.00</div></div>
+  </div>
+
+
+  <div class="ledger">
+    <table>
+      <thead><tr><th>DATE</th><th>ORDER_ID</th><th>NAME</th><th>QNTY</th><th class="num">P_PRICE</th><th class="num">TOTAL</th><th>STATUS</th></tr></thead>
+      <tbody><tr><td>2026-08-04</td><td>870</td><td>KUNDAN NECKLACE</td><td>4</td><td class="num">₹760.00</td><td class="num">₹3,040.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>882</td><td>KUNDAN NECKLACE</td><td>2</td><td class="num">₹1,100.00</td><td class="num">₹2,200.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>887</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,100.00</td><td class="num">₹1,100.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>869</td><td>KUNDAN NECKLACE</td><td>7</td><td class="num">₹760.00</td><td class="num">₹5,320.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>886</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,100.00</td><td class="num">₹1,100.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>909</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹950.00</td><td class="num">₹950.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>900</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,000.00</td><td class="num">₹1,000.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>866</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹760.00</td><td class="num">₹760.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>912</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,000.00</td><td class="num">₹1,000.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>913</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,000.00</td><td class="num">₹1,000.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>914</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,000.00</td><td class="num">₹1,000.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>915</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,000.00</td><td class="num">₹1,000.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>916</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,000.00</td><td class="num">₹1,000.00</td><td>OLD</td></tr><tr><td>2026-08-04</td><td>917</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,600.00</td><td class="num">₹1,600.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>139</td><td>AD NECKLACE</td><td>1</td><td class="num">₹680.00</td><td class="num">₹680.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>918</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,500.00</td><td class="num">₹1,500.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>919</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,500.00</td><td class="num">₹1,500.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>920</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,500.00</td><td class="num">₹1,500.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>921</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,500.00</td><td class="num">₹1,500.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>922</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,500.00</td><td class="num">₹1,500.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>923</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,500.00</td><td class="num">₹1,500.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>924</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,500.00</td><td class="num">₹1,500.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>825</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>826</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>827</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>828</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>829</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>830</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>831</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>832</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>833</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-05</td><td>834</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-07</td><td>403</td><td>KUNDAN ERRINGS</td><td>3</td><td class="num">₹385.00</td><td class="num">₹1,155.00</td><td>OLD</td></tr><tr><td>2026-08-11</td><td>142</td><td>AD NECKLACE</td><td>2</td><td class="num">₹1,500.00</td><td class="num">₹3,000.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>908</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹950.00</td><td class="num">₹950.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>900</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,000.00</td><td class="num">₹1,000.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>925</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,800.00</td><td class="num">₹1,800.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>926</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,800.00</td><td class="num">₹1,800.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>927</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,040.00</td><td class="num">₹1,040.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>928</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,040.00</td><td class="num">₹1,040.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>929</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,040.00</td><td class="num">₹1,040.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>930</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,040.00</td><td class="num">₹1,040.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>931</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,040.00</td><td class="num">₹1,040.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>932</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,150.00</td><td class="num">₹1,150.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>933</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,150.00</td><td class="num">₹1,150.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>934</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,150.00</td><td class="num">₹1,150.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>935</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,150.00</td><td class="num">₹1,150.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>936</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,050.00</td><td class="num">₹1,050.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>937</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,050.00</td><td class="num">₹1,050.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>938</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,050.00</td><td class="num">₹1,050.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>939</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,450.00</td><td class="num">₹1,450.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>940</td><td>KUNDAN BRACLET</td><td>1</td><td class="num">₹560.00</td><td class="num">₹560.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>941</td><td>KUNDAN BRACLET</td><td>1</td><td class="num">₹560.00</td><td class="num">₹560.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>942</td><td>KUNDAN BRACLET</td><td>1</td><td class="num">₹610.00</td><td class="num">₹610.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>943</td><td>KUNDAN BRACLET</td><td>1</td><td class="num">₹610.00</td><td class="num">₹610.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>944</td><td>KUNDAN BRACLET</td><td>1</td><td class="num">₹610.00</td><td class="num">₹610.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>945</td><td>KUNDAN BRACLET</td><td>1</td><td class="num">₹560.00</td><td class="num">₹560.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>946</td><td>KUNDAN BRACLET</td><td>1</td><td class="num">₹560.00</td><td class="num">₹560.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>947</td><td>KUNDAN BRACLET</td><td>1</td><td class="num">₹560.00</td><td class="num">₹560.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>948</td><td>KUNDAN BRACLET</td><td>1</td><td class="num">₹560.00</td><td class="num">₹560.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>949</td><td>KUNDAN BRACLET</td><td>1</td><td class="num">₹560.00</td><td class="num">₹560.00</td><td>OLD</td></tr><tr><td>2026-08-13</td><td>870</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹760.00</td><td class="num">₹760.00</td><td>OLD</td></tr><tr><td>2026-08-13</td><td>869</td><td>KUNDAN NECKLACE</td><td>3</td><td class="num">₹760.00</td><td class="num">₹2,280.00</td><td>OLD</td></tr><tr><td>2026-08-13</td><td>900</td><td>KUNDAN NECKLACE</td><td>2</td><td class="num">₹1,000.00</td><td class="num">₹2,000.00</td><td>OLD</td></tr><tr><td>2026-08-13</td><td>868</td><td>KUNDAN NECKLACE</td><td>2</td><td class="num">₹760.00</td><td class="num">₹1,520.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>273</td><td>AD MANGALSUTRA</td><td>1</td><td class="num">₹324.00</td><td class="num">₹324.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>274</td><td>AD MANGALSUTRA</td><td>1</td><td class="num">₹360.00</td><td class="num">₹360.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>275</td><td>AD MANGALSUTRA</td><td>1</td><td class="num">₹360.00</td><td class="num">₹360.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>276</td><td>AD MANGALSUTRA</td><td>1</td><td class="num">₹532.00</td><td class="num">₹532.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>277</td><td>AD MANGALSUTRA</td><td>1</td><td class="num">₹344.00</td><td class="num">₹344.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>278</td><td>AD MANGALSUTRA</td><td>1</td><td class="num">₹620.00</td><td class="num">₹620.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>279</td><td>AD MANGALSUTRA</td><td>1</td><td class="num">₹436.00</td><td class="num">₹436.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>280</td><td>AD MANGALSUTRA</td><td>1</td><td class="num">₹976.00</td><td class="num">₹976.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>281</td><td>AD MANGALSUTRA</td><td>1</td><td class="num">₹724.00</td><td class="num">₹724.00</td><td>OLD</td></tr><tr><td>2026-08-12</td><td>282</td><td>AD MANGALSUTRA</td><td>1</td><td class="num">₹824.00</td><td class="num">₹824.00</td><td>OLD</td></tr><tr><td>2026-08-19</td><td>872</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹760.00</td><td class="num">₹760.00</td><td>OLD</td></tr><tr><td>2026-08-19</td><td>834</td><td>KUNDAN ERRINGS</td><td>2</td><td class="num">₹420.00</td><td class="num">₹840.00</td><td>OLD</td></tr><tr><td>2026-08-19</td><td>891</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,100.00</td><td class="num">₹1,100.00</td><td>OLD</td></tr><tr><td>2026-08-19</td><td>920</td><td>KUNDAN NECKLACE</td><td>2</td><td class="num">₹1,500.00</td><td class="num">₹3,000.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>950</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,100.00</td><td class="num">₹1,100.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>951</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,100.00</td><td class="num">₹1,100.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>952</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,100.00</td><td class="num">₹1,100.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>953</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,100.00</td><td class="num">₹1,100.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>954</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,100.00</td><td class="num">₹1,100.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>627</td><td>POLKI NECKLACE</td><td>1</td><td class="num">₹297.00</td><td class="num">₹297.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>628</td><td>POLKI NECKLACE</td><td>1</td><td class="num">₹297.00</td><td class="num">₹297.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>629</td><td>POLKI NECKLACE</td><td>2</td><td class="num">₹414.00</td><td class="num">₹828.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>630</td><td>POLKI NECKLACE</td><td>2</td><td class="num">₹320.00</td><td class="num">₹640.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>631</td><td>POLKI NECKLACE</td><td>2</td><td class="num">₹420.00</td><td class="num">₹840.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>632</td><td>POLKI NECKLACE</td><td>2</td><td class="num">₹380.00</td><td class="num">₹760.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>633</td><td>POLKI NECKLACE</td><td>2</td><td class="num">₹380.00</td><td class="num">₹760.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>634</td><td>POLKI NECKLACE</td><td>2</td><td class="num">₹380.00</td><td class="num">₹760.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>635</td><td>POLKI NECKLACE</td><td>2</td><td class="num">₹360.00</td><td class="num">₹720.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>432</td><td>KUNDAN RING</td><td>2</td><td class="num">₹280.00</td><td class="num">₹560.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>835</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹600.00</td><td class="num">₹600.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>836</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹600.00</td><td class="num">₹600.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>837</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹600.00</td><td class="num">₹600.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>838</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹600.00</td><td class="num">₹600.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>839</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹600.00</td><td class="num">₹600.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>283</td><td>AD ERRINGS</td><td>2</td><td class="num">₹300.00</td><td class="num">₹600.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>284</td><td>AD ERRINGS</td><td>1</td><td class="num">₹340.00</td><td class="num">₹340.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>285</td><td>AD ERRINGS</td><td>1</td><td class="num">₹280.00</td><td class="num">₹280.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>286</td><td>AD ERRINGS</td><td>1</td><td class="num">₹380.00</td><td class="num">₹380.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>287</td><td>AD PENDANT</td><td>1</td><td class="num">₹230.00</td><td class="num">₹230.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>288</td><td>AD PENDANT</td><td>1</td><td class="num">₹230.00</td><td class="num">₹230.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>289</td><td>AD PENDANT</td><td>1</td><td class="num">₹150.00</td><td class="num">₹150.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>290</td><td>AD PENDANT</td><td>1</td><td class="num">₹150.00</td><td class="num">₹150.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>291</td><td>AD PENDANT</td><td>1</td><td class="num">₹230.00</td><td class="num">₹230.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>292</td><td>AD PENDANT</td><td>1</td><td class="num">₹280.00</td><td class="num">₹280.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>293</td><td>AD PENDANT</td><td>1</td><td class="num">₹120.00</td><td class="num">₹120.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>294</td><td>AD PENDANT</td><td>1</td><td class="num">₹250.00</td><td class="num">₹250.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>762</td><td>POLKI ERRINGS</td><td>1</td><td class="num">₹250.00</td><td class="num">₹250.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>763</td><td>POLKI ERRINGS</td><td>1</td><td class="num">₹230.00</td><td class="num">₹230.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>764</td><td>POLKI ERRINGS</td><td>1</td><td class="num">₹400.00</td><td class="num">₹400.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>765</td><td>POLKI ERRINGS</td><td>1</td><td class="num">₹240.00</td><td class="num">₹240.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>766</td><td>POLKI ERRINGS</td><td>1</td><td class="num">₹240.00</td><td class="num">₹240.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>767</td><td>POLKI ERRINGS</td><td>1</td><td class="num">₹420.00</td><td class="num">₹420.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>768</td><td>POLKI ERRINGS</td><td>2</td><td class="num">₹240.00</td><td class="num">₹480.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>769</td><td>POLKI ERRINGS</td><td>2</td><td class="num">₹240.00</td><td class="num">₹480.00</td><td>OLD</td></tr><tr><td>2026-08-20</td><td>770</td><td>POLKI ERRINGS</td><td>2</td><td class="num">₹240.00</td><td class="num">₹480.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>918</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,500.00</td><td class="num">₹1,500.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>921</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,500.00</td><td class="num">₹1,500.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>897</td><td>KUNDAN NECKLACE</td><td>2</td><td class="num">₹970.00</td><td class="num">₹1,940.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>917</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,600.00</td><td class="num">₹1,600.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>912</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,000.00</td><td class="num">₹1,000.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>951</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,100.00</td><td class="num">₹1,100.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>404</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹623.00</td><td class="num">₹623.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>503</td><td>KUNDAN BANGLES</td><td>1</td><td class="num">₹750.00</td><td class="num">₹750.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>823</td><td>KUNDAN ERRINGS</td><td>1</td><td class="num">₹350.00</td><td class="num">₹350.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>886</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,100.00</td><td class="num">₹1,100.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>955</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹920.00</td><td class="num">₹920.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>956</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹920.00</td><td class="num">₹920.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>957</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹920.00</td><td class="num">₹920.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>958</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹920.00</td><td class="num">₹920.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>959</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹850.00</td><td class="num">₹850.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>960</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹850.00</td><td class="num">₹850.00</td><td>OLD</td></tr><tr><td>2026-08-25</td><td>961</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹850.00</td><td class="num">₹850.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>870</td><td>KUNDAN NECKLACE</td><td>4</td><td class="num">₹760.00</td><td class="num">₹3,040.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>916</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,000.00</td><td class="num">₹1,000.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>918</td><td>KUNDAN NECKLACE</td><td>2</td><td class="num">₹1,500.00</td><td class="num">₹3,000.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>700</td><td>POLKI BANGLES</td><td>2</td><td class="num">₹735.00</td><td class="num">₹1,470.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>701</td><td>POLKI BANGLES</td><td>2</td><td class="num">₹650.00</td><td class="num">₹1,300.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>702</td><td>POLKI BANGLES</td><td>2</td><td class="num">₹650.00</td><td class="num">₹1,300.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>703</td><td>POLKI BANGLES</td><td>1</td><td class="num">₹720.00</td><td class="num">₹720.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>704</td><td>POLKI BANGLES</td><td>2</td><td class="num">₹620.00</td><td class="num">₹1,240.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>636</td><td>POLKI NECKLACE</td><td>1</td><td class="num">₹660.00</td><td class="num">₹660.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>637</td><td>POLKI NECKLACE</td><td>1</td><td class="num">₹440.00</td><td class="num">₹440.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>638</td><td>POLKI LONG NECKLACE</td><td>1</td><td class="num">₹780.00</td><td class="num">₹780.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>639</td><td>POLKI NECKLACE</td><td>1</td><td class="num">₹890.00</td><td class="num">₹890.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>640</td><td>POLKI NECKLACE</td><td>1</td><td class="num">₹1,060.00</td><td class="num">₹1,060.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>641</td><td>POLKI NECKLACE</td><td>1</td><td class="num">₹870.00</td><td class="num">₹870.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>642</td><td>POLKI NECKLACE</td><td>1</td><td class="num">₹1,060.00</td><td class="num">₹1,060.00</td><td>OLD</td></tr><tr><td>2026-08-27</td><td>643</td><td>POLKI NECKLACE</td><td>1</td><td class="num">₹1,160.00</td><td class="num">₹1,160.00</td><td>OLD</td></tr><tr><td>2026-08-28</td><td>433</td><td>KUNDAN PENDANT</td><td>1</td><td class="num">₹1,460.00</td><td class="num">₹1,460.00</td><td>OLD</td></tr><tr><td>2026-08-28</td><td>434</td><td>KUNDAN PENDANT</td><td>1</td><td class="num">₹1,070.00</td><td class="num">₹1,070.00</td><td>OLD</td></tr><tr><td>2026-08-28</td><td>435</td><td>KUNDAN PENDANT</td><td>1</td><td class="num">₹1,250.00</td><td class="num">₹1,250.00</td><td>OLD</td></tr><tr><td>2026-08-28</td><td>436</td><td>KUNDAN PENDANT</td><td>1</td><td class="num">₹1,460.00</td><td class="num">₹1,460.00</td><td>OLD</td></tr><tr><td>2026-08-28</td><td>437</td><td>KUNDAN PENDANT</td><td>1</td><td class="num">₹1,320.00</td><td class="num">₹1,320.00</td><td>OLD</td></tr><tr><td>2026-08-28</td><td>439</td><td>KUNDAN PENDANT</td><td>1</td><td class="num">₹1,180.00</td><td class="num">₹1,180.00</td><td>OLD</td></tr><tr><td>2026-08-28</td><td>438</td><td>KUNDAN PENDANT</td><td>1</td><td class="num">₹1,070.00</td><td class="num">₹1,070.00</td><td>OLD</td></tr><tr><td>2026-08-31</td><td>916</td><td>KUNDAN NECKLACE</td><td>2</td><td class="num">₹1,000.00</td><td class="num">₹2,000.00</td><td>OLD</td></tr><tr><td>2026-08-31</td><td>903</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹1,000.00</td><td class="num">₹1,000.00</td><td>OLD</td></tr><tr><td>2026-08-31</td><td>895</td><td>KUNDAN NECKLACE</td><td>1</td><td class="num">₹970.00</td><td class="num">₹970.00</td><td>OLD</td></tr><tr><td>2026-08-31</td><td>863</td><td>KUNDAN NECKLACE</td><td>2</td><td class="num">₹950.00</td><td class="num">₹1,900.00</td><td>OLD</td></tr><tr><td>2026-08-31</td><td>869</td><td>KUNDAN NECKLACE</td><td>2</td><td class="num">₹760.00</td><td class="num">₹1,520.00</td><td>OLD</td></tr><tr><td>2026-08-31</td><td>403</td><td>KUNDAN ERRINGS</td><td>3</td><td class="num">₹385.00</td><td class="num">₹1,155.00</td><td>OLD</td></tr></tbody>
+      <tfoot><tr><td></td><td></td><td>TOTAL PURCHASE</td><td>211</td><td class="num"></td><td class="num">₹161,525.00</td><td></td></tr></tfoot>
+    </table>
+  </div>
+<h2 class="section-heading">Old Gold</h2>
+  <div class="ledger">
+    <table>
+      <thead><tr><th>STATUS</th><th>sum(QNTY)</th><th class="num">sum(TOTAL)</th></tr></thead>
+      <tbody><tr><td>OLD</td><td>211</td><td class="num">₹161,525.00</td></tr></tbody>
+      
+    </table>
+  </div>
+<h2 class="section-heading">New Gold</h2>
+  <div class="ledger">
+    <table>
+      <thead><tr><th>STATUS</th><th>sum(QNTY)</th><th class="num">sum(TOTAL)</th></tr></thead>
+      <tbody><tr><td></td><td></td><td class="num"></td></tr></tbody>
+      
+    </table>
+  </div>
+
+  <script>
+    let fontScale = 1;
+    function applyScale() {
+      document.querySelector(':root').style.setProperty('--row-size', (1 * fontScale) + 'rem');
+    }
+    function zoomIn() { fontScale = Math.min(fontScale + 0.1, 1.8); applyScale(); }
+    function zoomOut() { fontScale = Math.max(fontScale - 0.1, 0.7); applyScale(); }
+    function resetZoom() { fontScale = 1; applyScale(); }
+  </script>
+</body>
+</html>

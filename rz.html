@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROZ JEWELLERS</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141110;
+    --panel:#1d1815;
+    --panel-line:#3a3128;
+    --gold:#cda653;
+    --gold-soft:#e8d5a3;
+    --cream:#f3ecdd;
+    --cream-dim:#a99f8d;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Poppins', sans-serif;
+    background:
+      radial-gradient(circle at 50% -10%, #2a221b 0%, var(--ink) 55%),
+      var(--ink);
+    color:var(--cream);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 20px;
+    position:relative;
+  }
+
+  .year-bar{
+    position:fixed;
+    top:22px;
+    right:24px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    z-index:10;
+    opacity:0;
+    animation:rise .8s ease-out .1s forwards;
+  }
+
+  .year-bar label{
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    color:var(--cream-dim);
+    text-transform:uppercase;
+  }
+
+  .year-select-shell{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+  }
+
+  .year-select-shell::after{
+    content:"";
+    position:absolute;
+    right:12px;
+    width:6px; height:6px;
+    border-right:1.5px solid var(--gold);
+    border-bottom:1.5px solid var(--gold);
+    transform:translateY(-3px) rotate(45deg);
+    pointer-events:none;
+  }
+
+  select#yearSelect{
+    appearance:none;
+    -webkit-appearance:none;
+    font-family:'Poppins', sans-serif;
+    font-size:0.85rem;
+    font-weight:500;
+    color:var(--gold-soft);
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:999px;
+    padding:8px 30px 8px 16px;
+    cursor:pointer;
+    transition:border-color .3s ease, box-shadow .3s ease;
+  }
+
+  select#yearSelect:hover,
+  select#yearSelect:focus-visible{
+    border-color:var(--gold);
+    outline:none;
+    box-shadow:0 0 0 3px rgba(205,166,83,0.15);
+  }
+
+  select#yearSelect option{
+    background:var(--panel);
+    color:var(--cream);
+  }
+
+  .stage{
+    width:100%;
+    max-width:620px;
+    text-align:center;
+  }
+
+  .mark{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:26px;
+    opacity:0;
+    animation:rise .8s ease-out .1s forwards;
+  }
+
+  .mark svg{ width:40px; height:40px; }
+
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:clamp(2.4rem, 6vw, 3.4rem);
+    letter-spacing:0.06em;
+    margin:0;
+    color:var(--gold-soft);
+    opacity:0;
+    animation:rise .8s ease-out .25s forwards;
+  }
+
+  .rule{
+    width:0;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin:22px auto 8px;
+    animation:extend 1s ease-out .6s forwards;
+  }
+
+  @keyframes extend{ to{ width:220px; } }
+
+  .tagline{
+    font-size:0.82rem;
+    letter-spacing:0.18em;
+    color:var(--cream-dim);
+    margin:0 0 48px;
+    opacity:0;
+    animation:rise .8s ease-out .4s forwards;
+  }
+
+  .buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    opacity:0;
+    animation:rise .8s ease-out .55s forwards;
+  }
+
+  @media (max-width:520px){
+    .buttons{ grid-template-columns:1fr; }
+    .year-bar{ top:16px; right:16px; }
+  }
+
+  button{
+    position:relative;
+    padding:24px 22px;
+    font-family:'Poppins', sans-serif;
+    font-size:0.95rem;
+    font-weight:500;
+    letter-spacing:0.01em;
+    line-height:1.4;
+    color:var(--cream);
+    background:linear-gradient(160deg, #241e19, #1a1512);
+    border:1px solid var(--panel-line);
+    border-radius:20px;
+    cursor:pointer;
+    text-align:left;
+    overflow:hidden;
+    isolation:isolate;
+    box-shadow:0 10px 24px -14px rgba(0,0,0,0.7);
+    transition:border-color .4s ease, transform .4s ease, box-shadow .4s ease;
+  }
+
+  button::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:20px;
+    padding:1px;
+    background:linear-gradient(135deg, var(--gold), transparent 40%, transparent 60%, var(--gold));
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+    opacity:0;
+    transition:opacity .4s ease;
+    z-index:-1;
+  }
+
+  button::after{
+    content:"";
+    position:absolute;
+    top:50%; right:20px;
+    width:8px; height:8px;
+    border-right:1.5px solid var(--gold);
+    border-bottom:1.5px solid var(--gold);
+    transform:translateY(-50%) rotate(-45deg);
+    opacity:0;
+    transition:opacity .4s ease, right .4s ease;
+  }
+
+  button:hover{
+    border-color:transparent;
+    transform:translateY(-4px) scale(1.015);
+    box-shadow:0 18px 34px -16px rgba(0,0,0,0.8), 0 0 0 1px rgba(205,166,83,0.15);
+  }
+
+  button:hover::before{ opacity:1; }
+  button:hover::after{ opacity:1; right:16px; }
+
+  button:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:4px;
+  }
+
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .mark, h1, .tagline, .buttons, .rule, .year-bar{ animation:none; opacity:1; }
+    .rule{ width:220px; }
+    button{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="year-bar">
+    <label for="yearSelect">Year</label>
+    <div class="year-select-shell">
+      <select id="yearSelect">
+        <option value="2026">2026</option>
+        <option value="2027">2027</option>
+        <option value="2028">2028</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 10 L20 4 L28 10 L34 18 L20 36 L6 18 Z" stroke="#cda653" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M12 10 L28 10 L20 36 Z" stroke="#cda653" stroke-width="1" stroke-linejoin="round" opacity="0.7"/>
+        <path d="M6 18 H34" stroke="#cda653" stroke-width="1" opacity="0.5"/>
+      </svg>
+    </div>
+
+    <h1>Roz Jewellers</h1>
+    <div class="rule"></div>
+    <p class="tagline">Business Records</p>
+
+    <div class="buttons">
+      <button onclick="handleClick('JEWELLERY PURCHASE & SALES')">Jewellery Purchase &amp; Sales</button>
+      <button onclick="handleClick('PROFIT & EXPANSES')">Profit &amp; Expenses</button>
+      <button onclick="handleClick('DETAILED LIST')">Detailed List</button>
+    </div>
+  </div>
+
+  <script>
+    const routes = {
+      'JEWELLERY PURCHASE & SALES': 'sp.html',
+      'PROFIT & EXPANSES': 'all.html',
+      'DETAILED LIST': 'list.html'
+    };
+
+    const yearSelect = document.getElementById('yearSelect');
+    const storedYear = localStorage.getItem('rozSelectedYear');
+    if (storedYear && [...yearSelect.options].some(o => o.value === storedYear)) {
+      yearSelect.value = storedYear;
+    } else {
+      localStorage.setItem('rozSelectedYear', yearSelect.value);
+    }
+
+    yearSelect.addEventListener('change', () => {
+      localStorage.setItem('rozSelectedYear', yearSelect.value);
+    });
+
+    function handleClick(action) {
+      const url = routes[action];
+      if (url) {
+        const year = yearSelect.value;
+        localStorage.setItem('rozSelectedYear', year);
+        window.location.href = `${url}?year=${year}`;
+      } else {
+        alert("Unknown action: " + action);
+      }
+    }
+  </script>
+
+</body>
+</html>

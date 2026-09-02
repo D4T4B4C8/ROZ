@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>August Expenses</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141110;
+    --panel-line:#3a3128;
+    --gold:#cda653;
+    --gold-soft:#e8d5a3;
+    --cream:#f3ecdd;
+    --cream-dim:#a99f8d;
+    --credit:#6b9e78;
+    --row-size:1rem;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; min-height:100vh;
+    font-family:'Poppins', sans-serif;
+    background: radial-gradient(circle at 50% -10%, #2a221b 0%, var(--ink) 55%), var(--ink);
+    color:var(--cream);
+    padding:40px 20px 80px;
+  }
+  .topbar{
+    max-width:900px; margin:0 auto 10px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .back-link{
+    font-size:0.82rem; letter-spacing:0.04em; color:var(--cream-dim);
+    text-decoration:none; border:1px solid var(--panel-line);
+    padding:8px 16px; border-radius:999px;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .back-link:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .zoom-controls{ display:flex; gap:6px; }
+  .zoom-controls button{
+    font-family:'Poppins', sans-serif; font-size:0.78rem; font-weight:500;
+    color:var(--gold-soft); background:#1d1815; border:1px solid var(--panel-line);
+    padding:8px 14px; border-radius:999px; cursor:pointer;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .zoom-controls button:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .page-title{ max-width:900px; margin:0 auto 6px; text-align:center; }
+  .page-title h1{
+    font-family:'Cormorant Garamond', serif; font-weight:600;
+    font-size:clamp(1.9rem, 4.2vw, 2.5rem); color:var(--gold-soft); margin:0 0 6px;
+  }
+  .page-title p{ margin:0; font-size:0.8rem; letter-spacing:0.14em; color:var(--cream-dim); }
+  .summary-strip{
+    max-width:900px; margin:26px auto 34px; display:flex;
+    justify-content:center; gap:14px; flex-wrap:wrap;
+  }
+  .summary-pill{
+    border:1px solid var(--panel-line); border-radius:14px; padding:12px 22px;
+    background:linear-gradient(160deg, #201a15, #171310); text-align:center; min-width:120px;
+  }
+  .summary-pill .label{ font-size:0.68rem; letter-spacing:0.1em; color:var(--cream-dim); margin-bottom:4px; }
+  .summary-pill .value{
+    font-family:'Cormorant Garamond', serif; font-size:1.3rem; font-weight:600; color:var(--gold-soft);
+  }
+  .section-heading{
+    max-width:900px; margin:26px auto 8px; padding:0 4px;
+    font-family:'Cormorant Garamond', serif; font-weight:600; font-size:1.2rem; color:var(--gold-soft);
+  }
+  .ledger{
+    max-width:900px; margin:0 auto 18px;
+    background:linear-gradient(160deg, #201a15, #171310);
+    border:1px solid var(--panel-line); border-radius:20px; padding:8px 0 0;
+    box-shadow:0 14px 30px -18px rgba(0,0,0,0.75); overflow:auto;
+  }
+  table{ width:100%; border-collapse:collapse; font-size:var(--row-size); }
+  thead th{
+    font-size:0.72rem; letter-spacing:0.08em; color:var(--cream-dim); font-weight:500;
+    text-align:left; padding:14px 18px; border-bottom:1px solid var(--panel-line); white-space:nowrap;
+  }
+  thead th.num, td.num{ text-align:right; }
+  tbody td{
+    padding:12px 18px; border-bottom:1px solid rgba(58,49,40,0.5);
+    font-variant-numeric:tabular-nums; color:var(--cream); white-space:nowrap;
+  }
+  tbody tr:last-of-type td{ border-bottom:none; }
+  tbody tr:nth-child(even){ background:rgba(243,236,221,0.02); }
+  tbody tr:hover{ background:rgba(205,166,83,0.06); }
+  td.credit{ color:var(--credit); }
+  td.empty{ text-align:center; color:var(--cream-dim); padding:22px; }
+  tfoot td{
+    padding:16px 18px; font-family:'Cormorant Garamond', serif; font-size:1.1rem;
+    font-weight:600; color:var(--gold-soft); border-top:1px solid var(--gold);
+    background:rgba(205,166,83,0.06);
+  }
+  @media (max-width:560px){
+    thead th, tbody td, tfoot td{ padding:10px 12px; }
+    .summary-pill{ min-width:100px; padding:10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a class="back-link" href="list.html">&larr; Monthly Report</a>
+    <div class="zoom-controls">
+      <button onclick="zoomOut()">A&minus;</button>
+      <button onclick="resetZoom()">Reset</button>
+      <button onclick="zoomIn()">A+</button>
+    </div>
+  </div>
+
+  <div class="page-title">
+    <h1>August Expenses</h1>
+    <p>Roz Jewellers &middot; Business Records</p>
+  </div>
+
+  <div class="summary-strip">
+    <div class="summary-pill"><div class="label">ENTRIES</div><div class="value">14</div></div>
+    <div class="summary-pill"><div class="label">TOTAL</div><div class="value">₹68,851.00</div></div>
+  </div>
+
+
+  <div class="ledger">
+    <table>
+      <thead><tr><th>S_NO</th><th>DATE</th><th>NAME</th><th class="num">AMOUNT</th></tr></thead>
+      <tbody><tr><td>1</td><td>2026-08-10</td><td>shop rent</td><td class="num">₹13,000.00</td></tr><tr><td>2</td><td>2026-08-10</td><td>mehnaz sal</td><td class="num">₹6,000.00</td></tr><tr><td>3</td><td>2026-08-15</td><td>faizan sal</td><td class="num">₹14,000.00</td></tr><tr><td>4</td><td>2026-08-28</td><td>computer screen</td><td class="num">₹5,516.00</td></tr><tr><td>5</td><td>2026-08-31</td><td>goquick</td><td class="num">₹3,000.00</td></tr><tr><td>6</td><td>2026-08-31</td><td>DORI &amp; BOXES</td><td class="num">₹3,850.00</td></tr><tr><td>7</td><td>2026-08-31</td><td>electricity bill</td><td class="num">₹2,400.00</td></tr><tr><td>8</td><td>2026-08-31</td><td>ETSY PLUS</td><td class="num credit">−₹762.00</td></tr><tr><td>9</td><td>2026-08-31</td><td>Bill for click</td><td class="num">₹8,870.00</td></tr><tr><td>10</td><td>2026-08-31</td><td>LISTING</td><td class="num">₹5,377.00</td></tr><tr><td>11</td><td>2026-08-31</td><td>wifi</td><td class="num">₹500.00</td></tr><tr><td>12</td><td>2026-08-31</td><td>ebay</td><td class="num">₹2,700.00</td></tr><tr><td>13</td><td>2026-08-31</td><td>gst</td><td class="num">₹2,000.00</td></tr><tr><td>14</td><td>2026-08-31</td><td>shopify</td><td class="num">₹2,400.00</td></tr></tbody>
+      <tfoot><tr><td></td><td></td><td>TOTAL</td><td class="num">₹68,851.00</td></tr></tfoot>
+    </table>
+  </div>
+
+  <script>
+    let fontScale = 1;
+    function applyScale() {
+      document.querySelector(':root').style.setProperty('--row-size', (1 * fontScale) + 'rem');
+    }
+    function zoomIn() { fontScale = Math.min(fontScale + 0.1, 1.8); applyScale(); }
+    function zoomOut() { fontScale = Math.max(fontScale - 0.1, 0.7); applyScale(); }
+    function resetZoom() { fontScale = 1; applyScale(); }
+  </script>
+</body>
+</html>

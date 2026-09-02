@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>August Sales</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141110;
+    --panel-line:#3a3128;
+    --gold:#cda653;
+    --gold-soft:#e8d5a3;
+    --cream:#f3ecdd;
+    --cream-dim:#a99f8d;
+    --credit:#6b9e78;
+    --row-size:1rem;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; min-height:100vh;
+    font-family:'Poppins', sans-serif;
+    background: radial-gradient(circle at 50% -10%, #2a221b 0%, var(--ink) 55%), var(--ink);
+    color:var(--cream);
+    padding:40px 20px 80px;
+  }
+  .topbar{
+    max-width:900px; margin:0 auto 10px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .back-link{
+    font-size:0.82rem; letter-spacing:0.04em; color:var(--cream-dim);
+    text-decoration:none; border:1px solid var(--panel-line);
+    padding:8px 16px; border-radius:999px;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .back-link:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .zoom-controls{ display:flex; gap:6px; }
+  .zoom-controls button{
+    font-family:'Poppins', sans-serif; font-size:0.78rem; font-weight:500;
+    color:var(--gold-soft); background:#1d1815; border:1px solid var(--panel-line);
+    padding:8px 14px; border-radius:999px; cursor:pointer;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .zoom-controls button:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .page-title{ max-width:900px; margin:0 auto 6px; text-align:center; }
+  .page-title h1{
+    font-family:'Cormorant Garamond', serif; font-weight:600;
+    font-size:clamp(1.9rem, 4.2vw, 2.5rem); color:var(--gold-soft); margin:0 0 6px;
+  }
+  .page-title p{ margin:0; font-size:0.8rem; letter-spacing:0.14em; color:var(--cream-dim); }
+  .summary-strip{
+    max-width:900px; margin:26px auto 34px; display:flex;
+    justify-content:center; gap:14px; flex-wrap:wrap;
+  }
+  .summary-pill{
+    border:1px solid var(--panel-line); border-radius:14px; padding:12px 22px;
+    background:linear-gradient(160deg, #201a15, #171310); text-align:center; min-width:120px;
+  }
+  .summary-pill .label{ font-size:0.68rem; letter-spacing:0.1em; color:var(--cream-dim); margin-bottom:4px; }
+  .summary-pill .value{
+    font-family:'Cormorant Garamond', serif; font-size:1.3rem; font-weight:600; color:var(--gold-soft);
+  }
+  .section-heading{
+    max-width:900px; margin:26px auto 8px; padding:0 4px;
+    font-family:'Cormorant Garamond', serif; font-weight:600; font-size:1.2rem; color:var(--gold-soft);
+  }
+  .ledger{
+    max-width:900px; margin:0 auto 18px;
+    background:linear-gradient(160deg, #201a15, #171310);
+    border:1px solid var(--panel-line); border-radius:20px; padding:8px 0 0;
+    box-shadow:0 14px 30px -18px rgba(0,0,0,0.75); overflow:auto;
+  }
+  table{ width:100%; border-collapse:collapse; font-size:var(--row-size); }
+  thead th{
+    font-size:0.72rem; letter-spacing:0.08em; color:var(--cream-dim); font-weight:500;
+    text-align:left; padding:14px 18px; border-bottom:1px solid var(--panel-line); white-space:nowrap;
+  }
+  thead th.num, td.num{ text-align:right; }
+  tbody td{
+    padding:12px 18px; border-bottom:1px solid rgba(58,49,40,0.5);
+    font-variant-numeric:tabular-nums; color:var(--cream); white-space:nowrap;
+  }
+  tbody tr:last-of-type td{ border-bottom:none; }
+  tbody tr:nth-child(even){ background:rgba(243,236,221,0.02); }
+  tbody tr:hover{ background:rgba(205,166,83,0.06); }
+  td.credit{ color:var(--credit); }
+  td.empty{ text-align:center; color:var(--cream-dim); padding:22px; }
+  tfoot td{
+    padding:16px 18px; font-family:'Cormorant Garamond', serif; font-size:1.1rem;
+    font-weight:600; color:var(--gold-soft); border-top:1px solid var(--gold);
+    background:rgba(205,166,83,0.06);
+  }
+  @media (max-width:560px){
+    thead th, tbody td, tfoot td{ padding:10px 12px; }
+    .summary-pill{ min-width:100px; padding:10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a class="back-link" href="sp.html">&larr; Sales vs Purchases</a>
+    <div class="zoom-controls">
+      <button onclick="zoomOut()">A&minus;</button>
+      <button onclick="resetZoom()">Reset</button>
+      <button onclick="zoomIn()">A+</button>
+    </div>
+  </div>
+
+  <div class="page-title">
+    <h1>August Sales</h1>
+    <p>Roz Jewellers &middot; Business Records</p>
+  </div>
+
+  <div class="summary-strip">
+    <div class="summary-pill"><div class="label">ENTRIES</div><div class="value">66</div></div>
+    <div class="summary-pill"><div class="label">TOTAL</div><div class="value">₹238,065.00</div></div>
+  </div>
+
+
+  <div class="ledger">
+    <table>
+      <thead><tr><th>date</th><th>invoice_no</th><th>name</th><th>order_id</th><th class="num">amount</th><th>status</th></tr></thead>
+      <tbody><tr><td>2026-08-26</td><td>2026-27/100</td><td>kamakshi</td><td>362310118</td><td class="num">₹8,049.00</td><td>OK</td></tr><tr><td>2026-08-26</td><td>2026-27/101</td><td>gitika</td><td>869</td><td class="num">₹2,757.00</td><td>OK</td></tr><tr><td>2026-08-26</td><td>2026-27/102</td><td>pragati</td><td>916</td><td class="num">₹4,020.00</td><td>OK</td></tr><tr><td>2026-08-27</td><td>2026-27/103</td><td>marya</td><td>403</td><td class="num">₹1,793.00</td><td>OK</td></tr><tr><td>2026-08-27</td><td>2026-27/104</td><td>maheswary</td><td>869</td><td class="num">₹3,155.00</td><td>OK</td></tr><tr><td>2026-08-27</td><td>2026-27/105</td><td>sana</td><td>863114128</td><td class="num">₹11,755.00</td><td>OK</td></tr><tr><td>2026-08-29</td><td>2026-27/106</td><td>saumya</td><td>502</td><td class="num">₹4,763.00</td><td>OK</td></tr><tr><td>2026-08-29</td><td>2026-27/107</td><td>rupa</td><td>403</td><td class="num">₹1,566.00</td><td>OK</td></tr><tr><td>2026-08-31</td><td>2026-27/108</td><td>priya</td><td>934</td><td class="num">₹4,191.00</td><td>OK</td></tr><tr><td>2026-08-31</td><td>2026-27/109</td><td>puja</td><td>869</td><td class="num">₹3,164.00</td><td>OK</td></tr><tr><td>2026-08-31</td><td>2026-27/110</td><td>shabana</td><td>946</td><td class="num">₹2,695.00</td><td>OK</td></tr><tr><td>2026-08-01</td><td>2026-27/46</td><td>adeela</td><td>870</td><td class="num">₹3,158.00</td><td>OK</td></tr><tr><td>2026-08-01</td><td>2026-27/47</td><td>marie</td><td>870</td><td class="num">₹5,152.00</td><td>OK</td></tr><tr><td>2026-08-02</td><td>2026-27/48</td><td>sandeep</td><td>900</td><td class="num">₹3,745.00</td><td>OK</td></tr><tr><td>2026-08-01</td><td>2026-27/49</td><td>upasna</td><td>909</td><td class="num">₹3,550.00</td><td>OK</td></tr><tr><td>2026-08-03</td><td>2026-27/50</td><td>roopashree</td><td>887</td><td class="num">₹4,848.00</td><td>OK</td></tr><tr><td>2026-08-03</td><td>2026-27/51</td><td>farha</td><td>886</td><td class="num">₹4,238.00</td><td>OK</td></tr><tr><td>2026-08-04</td><td>2026-27/52</td><td>dipti</td><td>403882</td><td class="num">₹5,822.00</td><td>OK</td></tr><tr><td>2026-08-04</td><td>2026-27/53</td><td>swati</td><td>814</td><td class="num">₹1,678.00</td><td>OK</td></tr><tr><td>2026-08-04</td><td>2026-27/54</td><td>kalpana</td><td>409</td><td class="num">₹1,686.00</td><td>OK</td></tr><tr><td>2026-08-04</td><td>2026-27/55</td><td>kamakshi</td><td>364</td><td class="num">₹2,357.00</td><td>OK</td></tr><tr><td>2026-08-05</td><td>2026-27/56</td><td>padman</td><td>258259</td><td class="num">₹1,934.00</td><td>OK</td></tr><tr><td>2026-08-05</td><td>2026-27/57</td><td>adeela</td><td>270</td><td class="num">₹1,447.00</td><td>OK</td></tr><tr><td>2026-08-05</td><td>2026-27/58</td><td>amanjot</td><td>869</td><td class="num">₹3,149.00</td><td>OK</td></tr><tr><td>2026-08-06</td><td>2026-27/59</td><td>ripendeep</td><td>203</td><td class="num">₹2,480.00</td><td>OK</td></tr><tr><td>2026-08-06</td><td>2026-27/60</td><td>harpreet</td><td>870</td><td class="num">₹3,130.00</td><td>OK</td></tr><tr><td>2026-08-07</td><td>2026-27/61</td><td>parmeet</td><td>869</td><td class="num">₹3,169.00</td><td>OK</td></tr><tr><td>2026-08-07</td><td>2026-27/62</td><td>charanjit</td><td>900</td><td class="num">₹3,741.00</td><td>OK</td></tr><tr><td>2026-08-09</td><td>2026-27/63</td><td>nigam</td><td>908</td><td class="num">₹3,539.00</td><td>OK</td></tr><tr><td>2026-08-09</td><td>2026-27/64</td><td>umama</td><td>423</td><td class="num">₹2,513.00</td><td>OK</td></tr><tr><td>2026-08-09</td><td>2026-27/65</td><td>hema</td><td>869</td><td class="num">₹3,148.00</td><td>OK</td></tr><tr><td>2026-08-10</td><td>2026-27/66</td><td>brandi</td><td>309</td><td class="num">₹4,222.00</td><td>OK</td></tr><tr><td>2026-08-10</td><td>2026-27/67</td><td>naginder</td><td>503390870868</td><td class="num">₹10,315.00</td><td>OK</td></tr><tr><td>2026-08-10</td><td>2026-27/68</td><td>dolly</td><td>404</td><td class="num">₹2,379.00</td><td>OK</td></tr><tr><td>2026-08-14</td><td>2026-27/69</td><td>aashi</td><td>754761</td><td class="num">₹2,079.00</td><td>OK</td></tr><tr><td>2026-08-14</td><td>2026-27/70</td><td>aneesha</td><td>891</td><td class="num">₹4,839.00</td><td>OK</td></tr><tr><td>2026-08-14</td><td>2026-27/71</td><td>saira</td><td>870</td><td class="num">₹2,762.00</td><td>OK</td></tr><tr><td>2026-08-14</td><td>2026-27/72</td><td>sehtaj</td><td>868</td><td class="num">₹2,944.00</td><td>OK</td></tr><tr><td>2026-08-14</td><td>2026-27/73</td><td>aakanchha</td><td>920</td><td class="num">₹4,854.00</td><td>OK</td></tr><tr><td>2026-08-15</td><td>2026-27/74</td><td>shitol</td><td>869</td><td class="num">₹3,164.00</td><td>OK</td></tr><tr><td>2026-08-17</td><td>2026-27/75</td><td>farah</td><td>834</td><td class="num">₹2,255.00</td><td>OK</td></tr><tr><td>2026-08-17</td><td>2026-27/76</td><td>adrija</td><td>866</td><td class="num">₹3,167.00</td><td>OK</td></tr><tr><td>2026-08-17</td><td>2026-27/77</td><td>naginder</td><td>928</td><td class="num">₹2,766.00</td><td>OK</td></tr><tr><td>2026-08-17</td><td>2026-27/78</td><td>sharmila</td><td>868</td><td class="num">₹3,360.00</td><td>OK</td></tr><tr><td>2026-08-18</td><td>2026-27/79</td><td>samantha</td><td>897</td><td class="num">₹6,275.00</td><td>OK</td></tr><tr><td>2026-08-18</td><td>2026-27/80</td><td>hemangini</td><td>912</td><td class="num">₹3,507.00</td><td>OK</td></tr><tr><td>2026-08-19</td><td>2026-27/81</td><td>payal</td><td>322886</td><td class="num">₹9,042.00</td><td>OK</td></tr><tr><td>2026-08-19</td><td>2026-27/82</td><td>suhayla</td><td>921</td><td class="num">₹5,590.00</td><td>OK</td></tr><tr><td>2026-08-19</td><td>2026-27/83</td><td>noreen</td><td>834</td><td class="num">₹2,238.00</td><td>OK</td></tr><tr><td>2026-08-19</td><td>2026-27/84</td><td>shamini</td><td>251</td><td class="num">₹1,219.00</td><td>OK</td></tr><tr><td>2026-08-19</td><td>2026-27/85</td><td>adeela</td><td>761</td><td class="num">₹1,057.00</td><td>OK</td></tr><tr><td>2026-08-20</td><td>2026-27/86</td><td>prashanthi</td><td>868</td><td class="num">₹3,357.00</td><td>OK</td></tr><tr><td>2026-08-21</td><td>2026-27/87</td><td>simmi</td><td>632</td><td class="num">₹1,867.00</td><td>OK</td></tr><tr><td>2026-08-22</td><td>2026-27/88</td><td>kalpana</td><td>869</td><td class="num">₹3,166.00</td><td>OK</td></tr><tr><td>2026-08-22</td><td>2026-27/89</td><td>satvir</td><td>869907</td><td class="num">₹5,862.00</td><td>OK</td></tr><tr><td>2026-08-23</td><td>2026-27/90</td><td>aditi</td><td>951</td><td class="num">₹4,033.00</td><td>OK</td></tr><tr><td>2026-08-23</td><td>2026-27/91</td><td>kalpana</td><td>823</td><td class="num">₹0.00</td><td>CANCEL</td></tr><tr><td>2026-08-23</td><td>2026-27/92</td><td>pujal</td><td>916</td><td class="num">₹3,510.00</td><td>OK</td></tr><tr><td>2026-08-24</td><td>2026-27/93</td><td>zakia</td><td>917</td><td class="num">₹5,827.00</td><td>OK</td></tr><tr><td>2026-08-24</td><td>2026-27/94</td><td>susan</td><td>918</td><td class="num">₹4,871.00</td><td>OK</td></tr><tr><td>2026-08-25</td><td>2026-27/95</td><td>ruth</td><td>834</td><td class="num">₹2,254.00</td><td>OK</td></tr><tr><td>2026-08-25</td><td>2026-27/96</td><td>davina</td><td>903</td><td class="num">₹0.00</td><td>CANCEL</td></tr><tr><td>2026-08-25</td><td>2026-27/97</td><td>nalini</td><td>369</td><td class="num">₹2,360.00</td><td>OK</td></tr><tr><td>2026-08-26</td><td>2026-27/98</td><td>thea</td><td>918</td><td class="num">₹5,577.00</td><td>OK</td></tr><tr><td>2026-08-26</td><td>2026-27/99</td><td>satyam</td><td>945</td><td class="num">₹2,199.00</td><td>OK</td></tr><tr><td>2026-08-01</td><td>2026/45</td><td>samhitha</td><td>866</td><td class="num">₹2,756.00</td><td>OK</td></tr></tbody>
+      <tfoot><tr><td>TOTAL</td><td></td><td></td><td></td><td class="num">₹238,065.00</td><td></td></tr></tfoot>
+    </table>
+  </div>
+
+  <script>
+    let fontScale = 1;
+    function applyScale() {
+      document.querySelector(':root').style.setProperty('--row-size', (1 * fontScale) + 'rem');
+    }
+    function zoomIn() { fontScale = Math.min(fontScale + 0.1, 1.8); applyScale(); }
+    function zoomOut() { fontScale = Math.max(fontScale - 0.1, 0.7); applyScale(); }
+    function resetZoom() { fontScale = 1; applyScale(); }
+  </script>
+</body>
+</html>

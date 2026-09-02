@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monthly Report — Roz Jewellers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#141110;
+      --panel:#1d1815;
+      --panel-line:#3a3128;
+      --gold:#cda653;
+      --gold-soft:#e8d5a3;
+      --cream:#f3ecdd;
+      --cream-dim:#a99f8d;
+
+      --phone:#cda653;
+      --expenses:#a13d4c;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background:
+        radial-gradient(circle at 50% -10%, #2a221b 0%, var(--ink) 55%),
+        var(--ink);
+      color: var(--cream);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 80px;
+    }
+
+    .topbar{
+      width:100%;
+      max-width:900px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:14px;
+    }
+
+    .back-link{
+      font-size:0.82rem;
+      letter-spacing:0.04em;
+      color:var(--cream-dim);
+      text-decoration:none;
+      border:1px solid var(--panel-line);
+      padding:8px 16px;
+      border-radius:999px;
+      transition:border-color .3s ease, color .3s ease;
+    }
+    .back-link:hover{ border-color:var(--gold); color:var(--gold-soft); }
+
+    .year-badge{
+      font-size:0.78rem;
+      letter-spacing:0.08em;
+      color:var(--gold-soft);
+      border:1px solid var(--panel-line);
+      padding:8px 16px;
+      border-radius:999px;
+    }
+
+    .page-title{
+      width:100%;
+      max-width:900px;
+      text-align:center;
+      margin-bottom:10px;
+    }
+
+    .page-title h1{
+      font-family:'Cormorant Garamond', serif;
+      font-weight:600;
+      font-size:clamp(1.8rem, 4vw, 2.4rem);
+      color:var(--gold-soft);
+      margin:0 0 6px;
+    }
+
+    .page-title p{
+      margin:0;
+      font-size:0.8rem;
+      letter-spacing:0.14em;
+      color:var(--cream-dim);
+    }
+
+    .legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      justify-content:center;
+      margin:22px 0 46px;
+      max-width:900px;
+    }
+
+    .legend-item{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:0.78rem;
+      color:var(--cream-dim);
+    }
+
+    .swatch{
+      width:9px; height:9px;
+      border-radius:50%;
+      display:inline-block;
+    }
+
+    .empty-note{
+      width:100%;
+      max-width:900px;
+      font-size:0.9rem;
+      color:var(--cream-dim);
+      border:1px dashed var(--panel-line);
+      border-radius:16px;
+      padding:32px;
+      text-align:center;
+      display:none;
+    }
+
+    .month-card{
+      width:100%;
+      max-width:900px;
+      background:linear-gradient(160deg, #201a15, #171310);
+      border:1px solid var(--panel-line);
+      border-radius:20px;
+      padding:28px 32px 46px;
+      margin-bottom:26px;
+      box-shadow:0 14px 30px -18px rgba(0,0,0,0.75);
+    }
+
+    .month-card h2{
+      font-family:'Cormorant Garamond', serif;
+      font-weight:600;
+      font-size:1.5rem;
+      letter-spacing:0.05em;
+      color:var(--gold-soft);
+      margin:0 0 22px;
+      padding-bottom:12px;
+      border-bottom:1px solid var(--panel-line);
+    }
+
+    .chart-container {
+      display: flex;
+      gap: 22px;
+      align-items: flex-end;
+      justify-content:center;
+      flex-wrap:wrap;
+      padding-top:10px;
+    }
+
+    .bar {
+      width: 52px;
+      border-radius: 8px 8px 3px 3px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, filter .3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 0;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    .bar:hover {
+      transform: scale(1.06);
+      filter:brightness(1.15);
+      box-shadow: 0 0 16px rgba(205, 166, 83, 0.25);
+    }
+
+    .bar-label {
+      position: absolute;
+      bottom: -34px;
+      width: 110px;
+      left:50%;
+      transform:translateX(-50%);
+      text-align: center;
+      font-size: 10.5px;
+      letter-spacing:0.04em;
+      color: var(--cream-dim);
+    }
+
+    .tooltip {
+      position: absolute;
+      top: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--gold-soft);
+      color: #201a15;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight:500;
+      display: none;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .bar:hover .tooltip { display: block; }
+
+    .bar-phone    { background: linear-gradient(160deg, #e2c47f, var(--phone)); }
+    .bar-expenses { background: linear-gradient(160deg, #c46577, var(--expenses)); }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a class="back-link" href="rz.html">&larr; Dashboard</a>
+    <span class="year-badge" id="yearBadge">2026</span>
+  </div>
+
+  <div class="page-title">
+    <h1>Monthly Report</h1>
+    <p id="yearRange">2026</p>
+  </div>
+
+  <div class="legend" id="legend">
+    <div class="legend-item"><span class="swatch" style="background:var(--phone)"></span>Jewellery profit</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--expenses)"></span>Expenses</div>
+  </div>
+
+  <div class="empty-note" id="emptyNote">No entries recorded for this year yet — monthly cards will appear here as you add them.</div>
+
+  <div id="monthData">
+                    <div class="month-card" data-year="2026">
+      <h2>August</h2>
+      <div class="chart-container">
+        <div class="bar bar-phone" data-total="137147.48" onclick="openPage('augj.html')">
+          <div class="tooltip">₹137147.48</div><div class="bar-label">JEWELL PROFIT</div>
+        </div>
+        <div class="bar bar-expenses" data-total="68851" onclick="openPage('auge.html')">
+          <div class="tooltip">₹68851</div><div class="bar-label">EXPENSES</div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+  <script>
+    function openPage(url) {
+      window.location.href = url;
+    }
+
+    function getYear() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('year') || localStorage.getItem('rozSelectedYear') || '2026';
+    }
+
+    const year = getYear();
+    localStorage.setItem('rozSelectedYear', year);
+    document.getElementById('yearBadge').textContent = year;
+    document.getElementById('yearRange').textContent = year;
+
+    const monthData = document.getElementById('monthData');
+    const cardsForThisYear = monthData.querySelectorAll(`.month-card[data-year="${year}"]`);
+
+    if (cardsForThisYear.length === 0) {
+      monthData.style.display = 'none';
+      document.getElementById('legend').style.display = 'none';
+      document.getElementById('emptyNote').style.display = 'block';
+    } else {
+      // hide any month-cards that belong to a different year
+      monthData.querySelectorAll('.month-card').forEach(card => {
+        if (card.dataset.year !== year) card.style.display = 'none';
+      });
+
+      const bars = monthData.querySelectorAll(`.month-card[data-year="${year}"] .bar`);
+      let maxValue = 0;
+      bars.forEach(bar => {
+        const total = parseInt(bar.dataset.total, 10);
+        if (total > maxValue) maxValue = total;
+      });
+
+      const maxHeight = 220;
+      bars.forEach((bar, index) => {
+        const total = parseInt(bar.dataset.total, 10);
+        const height = maxValue ? (total / maxValue) * maxHeight : 0;
+        setTimeout(() => {
+          bar.style.height = `${height}px`;
+          bar.style.opacity = 1;
+          bar.style.transform = 'translateY(0)';
+        }, index * 60);
+      });
+    }
+  </script>
+
+</body>
+</html>

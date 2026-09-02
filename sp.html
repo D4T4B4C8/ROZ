@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jewellery Sales vs Purchases</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#141110;
+      --panel-line:#3a3128;
+      --gold:#cda653;
+      --gold-soft:#e8d5a3;
+      --cream:#f3ecdd;
+      --cream-dim:#a99f8d;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 40px 20px 80px;
+      text-align: center;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 50% -10%, #2a221b 0%, var(--ink) 55%),
+        var(--ink);
+    }
+
+    .topbar{
+      max-width:900px;
+      margin:0 auto 10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .back-link{
+      font-size:0.82rem;
+      letter-spacing:0.04em;
+      color:var(--cream-dim);
+      text-decoration:none;
+      border:1px solid var(--panel-line);
+      padding:8px 16px;
+      border-radius:999px;
+      transition:border-color .3s ease, color .3s ease;
+    }
+    .back-link:hover{ border-color:var(--gold); color:var(--gold-soft); }
+
+    .year-badge{
+      font-size:0.78rem;
+      letter-spacing:0.08em;
+      color:var(--gold-soft);
+      border:1px solid var(--panel-line);
+      padding:8px 16px;
+      border-radius:999px;
+    }
+
+    .page-title{
+      max-width:900px;
+      margin:0 auto 40px;
+    }
+
+    .page-title h1 {
+      font-family:'Cormorant Garamond', serif;
+      font-weight:600;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      margin: 0 0 6px;
+      color: var(--gold-soft);
+    }
+
+    .page-title p{
+      margin:0;
+      font-size:0.8rem;
+      letter-spacing:0.14em;
+      color:var(--cream-dim);
+    }
+
+    .empty-note{
+      max-width:900px;
+      margin:0 auto 34px;
+      font-size:0.85rem;
+      color:var(--cream-dim);
+      border:1px dashed var(--panel-line);
+      border-radius:14px;
+      padding:14px 18px;
+      display:none;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto 60px;
+    }
+
+    .chart-container {
+      background: linear-gradient(160deg, #201a15, #171310);
+      border: 1px solid var(--panel-line);
+      padding: 22px;
+      border-radius: 20px;
+      box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.75);
+      transition: transform 0.3s ease, border-color .3s ease;
+    }
+
+    .chart-container:hover {
+      transform: translateY(-4px);
+      border-color: rgba(205, 166, 83, 0.35);
+    }
+
+    canvas {
+      max-width: 100%;
+      height: 300px;
+    }
+
+    @media (max-width: 768px) {
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a class="back-link" href="rz.html">&larr; Dashboard</a>
+    <span class="year-badge" id="yearBadge">2026</span>
+  </div>
+
+  <div class="page-title">
+    <h1>Jewellery Sales vs Purchases</h1>
+    <p id="yearRange">Jan &mdash; Dec 2026</p>
+  </div>
+
+  <div class="empty-note" id="emptyNote">No entries recorded for this year yet — figures will fill in as you add them.</div>
+
+  <div class="chart-grid">
+    <div class="chart-container"><canvas id="purchasePieChart"></canvas></div>
+    <div class="chart-container"><canvas id="salesPieChart"></canvas></div>
+    <div class="chart-container"><canvas id="purchaseBarChart"></canvas></div>
+    <div class="chart-container"><canvas id="salesBarChart"></canvas></div>
+  </div>
+
+  <script>
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const zeros = new Array(12).fill(0);
+
+    // Add a year's real figures and links here as they come in — any
+    // year left out of this object automatically shows clean, empty charts.
+    const dataByYear = {
+      "2026": {
+            "saleAmounts": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  238065,
+                  0,
+                  0,
+                  0,
+                  0
+            ],
+            "saleQuantities": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  77,
+                  0,
+                  0,
+                  0,
+                  0
+            ],
+            "purchaseAmounts": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  161525,
+                  0,
+                  0,
+                  0,
+                  0
+            ],
+            "purchaseQuantities": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  211,
+                  0,
+                  0,
+                  0,
+                  0
+            ],
+            "purchaseLinks": {
+                  "Jan": "pjan.html",
+                  "Feb": "pfeb.html",
+                  "Mar": "pmar.html",
+                  "Apr": "papr.html",
+                  "May": "pmay.html",
+                  "Jun": "pjun.html",
+                  "Jul": "pjul.html",
+                  "Aug": "augp.html",
+                  "Sep": "psep.html",
+                  "Oct": "p_oct.html",
+                  "Nov": "p_nov.html",
+                  "Dec": "p_dec.html"
+            },
+            "saleLinks": {
+                  "Jan": "sjan.html",
+                  "Feb": "sfeb.html",
+                  "Mar": "smar.html",
+                  "Apr": "sapr.html",
+                  "May": "smay.html",
+                  "Jun": "sjun.html",
+                  "Jul": "sjul.html",
+                  "Aug": "augs.html",
+                  "Sep": "ssep.html",
+                  "Oct": "s_oct.html",
+                  "Nov": "s_nov.html",
+                  "Dec": "s_dec.html"
+            }
+      }
+};
+
+    function getYear() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('year') || localStorage.getItem('rozSelectedYear') || '2026';
+    }
+
+    const year = getYear();
+    localStorage.setItem('rozSelectedYear', year);
+    document.getElementById('yearBadge').textContent = year;
+    document.getElementById('yearRange').textContent = `Jan — Dec ${year}`;
+
+    const yd = dataByYear[year];
+    if (!yd) {
+      document.getElementById('emptyNote').style.display = 'block';
+    }
+
+    const saleAmounts = yd ? yd.saleAmounts : zeros;
+    const saleQuantities = yd ? yd.saleQuantities : zeros;
+    const purchaseAmounts = yd ? yd.purchaseAmounts : zeros;
+    const purchaseQuantities = yd ? yd.purchaseQuantities : zeros;
+    const purchaseLinks = yd ? yd.purchaseLinks : {};
+    const saleLinks = yd ? yd.saleLinks : {};
+
+    const cream = '#f3ecdd';
+    const dim = '#a99f8d';
+    const gridColor = 'rgba(243, 236, 221, 0.08)';
+
+    // copper / bronze family — purchases
+    const coppersBronzes = [
+      '#cda653', '#c99a5b', '#c58e63', '#c1826b',
+      '#bd7673', '#b96a7b', '#b55e83', '#b1528b',
+      '#a13d4c', '#b5713f', '#d4936a', '#e2c47f'
+    ];
+
+    // sapphire / emerald family — sales
+    const sapphiresEmeralds = [
+      '#6b9e78', '#5f9985', '#539492', '#478f9f',
+      '#5b84a6', '#4f7bab', '#4372b0', '#5b6fb5',
+      '#4fc3f7', '#81c784', '#aed581', '#b2ebf2'
+    ];
+
+    // PURCHASE PIE
+    new Chart(document.getElementById('purchasePieChart'), {
+      type: 'pie',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Purchase Amount',
+          data: purchaseAmounts,
+          backgroundColor: coppersBronzes,
+          borderColor: '#171310',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        onClick: (e, elements) => {
+          if (elements.length > 0) {
+            const chart = elements[0];
+            const label = months[chart.index];
+            const url = purchaseLinks[label];
+            if (url) window.location.href = url;
+          }
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: 'Purchase amount',
+            color: cream,
+            font: { family: "'Cormorant Garamond', serif", size: 18, weight: '600' }
+          },
+          legend: {
+            labels: { color: dim, font: { family: "'Poppins', sans-serif" } }
+          }
+        }
+      }
+    });
+
+    // SALES PIE
+    new Chart(document.getElementById('salesPieChart'), {
+      type: 'pie',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Sale Amount',
+          data: saleAmounts,
+          backgroundColor: sapphiresEmeralds,
+          borderColor: '#171310',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        onClick: (e, elements) => {
+          if (elements.length > 0) {
+            const chart = elements[0];
+            const label = months[chart.index];
+            const url = saleLinks[label];
+            if (url) window.location.href = url;
+          }
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: 'Sales amount',
+            color: cream,
+            font: { family: "'Cormorant Garamond', serif", size: 18, weight: '600' }
+          },
+          legend: {
+            labels: { color: dim, font: { family: "'Poppins', sans-serif" } }
+          }
+        }
+      }
+    });
+
+    // PURCHASE BAR
+    new Chart(document.getElementById('purchaseBarChart'), {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Purchase Quantity',
+          data: purchaseQuantities,
+          backgroundColor: coppersBronzes,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Purchase quantity',
+            color: cream,
+            font: { family: "'Cormorant Garamond', serif", size: 18, weight: '600' }
+          },
+          legend: { display: false }
+        },
+        scales: {
+          x: { ticks: { color: dim }, grid: { color: gridColor } },
+          y: { ticks: { color: dim }, grid: { color: gridColor }, beginAtZero: true }
+        }
+      }
+    });
+
+    // SALES BAR
+    new Chart(document.getElementById('salesBarChart'), {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Sale Quantity',
+          data: saleQuantities,
+          backgroundColor: sapphiresEmeralds,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Sales quantity',
+            color: cream,
+            font: { family: "'Cormorant Garamond', serif", size: 18, weight: '600' }
+          },
+          legend: { display: false }
+        },
+        scales: {
+          x: { ticks: { color: dim }, grid: { color: gridColor } },
+          y: { ticks: { color: dim }, grid: { color: gridColor }, beginAtZero: true }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
