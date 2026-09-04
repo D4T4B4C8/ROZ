@@ -1,0 +1,550 @@
+To achieve this look where the dashboard, grid lines, sidebar, topbar, and nodes are completely hidden in pitch darkness and **only reveal themselves when illuminated by your mouse cursor**, we can alter how the system uses the `reveal` factor calculated by the WebGL shader.
+
+Instead of rendering the WebGL light ray *behind* everything else, we can transform it into a **masking overlay** that sits on top of the entire application. By changing its CSS mix-blend mode to `multiply`, anything underneath the dark areas remains completely black ($0.0$), while things underneath the lit-up beams are illuminated ($1.0$).
+
+Here is the updated, integrated version where the interface remains hidden unless exposed by your light ray:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Vault & Volumetric Light Reveal</title>
+
+<style>
+:root {
+  /* CHANGE ONLY THIS */
+  --accent: #F54927;
+  
+  --bg: #050505;
+  --panel: #090909;
+  
+  --border: var(--accent);
+  --text: var(--accent);
+  --glow: var(--accent);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Consolas, monospace;
+}
+
+body {
+  background: #000000; /* Force deep black backdrop */
+  overflow: hidden;
+  color: var(--text);
+  height: 100vh;
+}
+
+/* 
+   CRITICAL CHANGE: WebGL Masking Overlay 
+   Moved to z-index: 99999 so it sits above all UI elements.
+   'pointer-events: none' lets you click buttons through the darkness.
+   'mix-blend-mode: multiply' turns unlit shader areas into masks.
+*/
+#c {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 99999;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+/* Animated Grid Layer */
+.grid {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(rgba(94,255,247,.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,157,0,.15) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridmove 20s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes gridmove {
+  from { transform: translateY(0); }
+  to { transform: translateY(40px); }
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  bottom: 10px;
+  width: 220px;
+  background: rgba(0,0,0,1);
+  border: 1px solid var(--border);
+  padding: 15px;
+  z-index: 5;
+}
+
+.logo {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.menu button {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 10px;
+  background: black;
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.menu button:hover {
+  box-shadow: 0 0 15px var(--glow);
+}
+
+/* Top Bar */
+.topbar {
+  position: fixed;
+  left: 250px;
+  right: 20px;
+  top: 10px;
+  height: 60px;
+  background: rgba(0,0,0,1);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 5;
+}
+
+/* Windows */
+.window {
+  position: absolute;
+  background: rgba(0,0,0,1);
+  border: 1px solid var(--border);
+  box-shadow: 0 0 15px rgba(94,255,247,.4);
+  width: 500px;
+  height: 350px;
+  z-index: 10;
+}
+
+.titlebar {
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--border);
+  cursor: move;
+}
+
+.close {
+  cursor: pointer;
+}
+
+.content {
+  padding: 15px;
+  height: calc(100% - 35px);
+  overflow: auto;
+}
+
+.note {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid rgba(94,255,247,.2);
+}
+
+.note h3 {
+  margin-bottom: 10px;
+}
+
+pre {
+  white-space: pre-wrap;
+  color: #ffd38a;
+}
+
+/* Particles */
+.particle {
+  position: fixed;
+  width: 2px;
+  height: 2px;
+  background: var(--border);
+  opacity: .6;
+  animation: float linear infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-100px); }
+}
+
+#matrix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: .25;
+  pointer-events: none;
+}
+
+#network {
+  position: fixed;
+  top: 0;
+  left: 240px;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+</style>
+</head>
+
+<body>
+
+<!-- UI Elements are rendered normally behind the master WebGL overlay mask -->
+<canvas id="matrix"></canvas>
+<canvas id="network"></canvas>
+
+<div class="grid"></div>
+
+<div class="sidebar">
+  <div class="logo">KNOWLEDGE VAULT</div>
+  <div class="menu">
+    <button onclick="openWindow('CLI Tools', cliData)">CLI TOOLS</button>
+    <button onclick="openWindow('Networking', netData)">NETWORKING</button>
+    <button onclick="openWindow('Linux', linuxData)">LINUX</button>
+    <button onclick="openWindow('Web Dev', webData)">WEB DEV</button>
+  </div>
+</div>
+
+<div class="topbar">
+  <h2>WHITEX DATABASE</h2>
+</div>
+
+<!-- WebGL Mask Canvas covers everything -->
+<canvas id="c"></canvas>
+
+<script>
+/* =============================================================================
+   1. INTEGRATED MOUSE TRACKER & FLOATING PARTICLES
+   ============================================================================= */
+let mx = .5, my = .5, txm = .5, tym = .5;
+
+window.addEventListener('mousemove', e => {
+  txm = e.clientX / window.innerWidth;
+  tym = 1 - e.clientY / window.innerHeight;
+});
+
+// Particles System
+for(let i=0; i<100; i++) {
+  let p = document.createElement("div");
+  p.className = "particle";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = (5 + Math.random() * 15) + "s";
+  document.body.appendChild(p);
+}
+
+
+/* =============================================================================
+   2. WEBGL VOLUMETRIC LIGHT RAY ENGINE (MODIFIED TO BE AN ILLUMINATION MASK)
+   ============================================================================= */
+const canvasGL = document.getElementById('c');
+const gl = canvasGL.getContext('webgl');
+
+const vs = `
+attribute vec2 p;
+varying vec2 uv;
+void main(){
+ uv = p * .5 + .5;
+ gl_Position = vec4(p, 0., 1.);
+}`;
+
+const fs = `
+precision highp float;
+varying vec2 uv;
+uniform vec2 r, m;
+uniform float t;
+uniform sampler2D txt;
+
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+
+float n(vec2 p){
+ vec2 i=floor(p), f=fract(p);
+ f=f*f*(3.-2.*f);
+ return mix(
+  mix(h(i),h(i+vec2(1.,0.)),f.x),
+  mix(h(i+vec2(0.,1.)),h(i+1.),f.x),
+  f.y
+ );
+}
+
+float fbm(vec2 p){
+ float v=0.;
+ float a=.5;
+ for(int i=0;i<6;i++){
+   v+=n(p)*a;
+   p*=2.;
+   a*=.5;
+ }
+ return v;
+}
+
+void main(){
+  vec2 p = (gl_FragCoord.xy - r * .5) / r.y;
+  vec2 ms = (m - .5) * 2.0;
+  vec3 col = vec3(0.0);
+  vec2 origin = vec2(ms.x * 0.9, ms.y * 0.6);
+  vec2 q = p - origin;
+
+  float ang = atan(q.y, q.x);
+  float dist = length(q);
+  
+  // Base light calculation
+  float beam = exp(-abs(q.y) * 40.0);
+  beam *= smoothstep(2.2, 0.0, abs(q.x));
+  
+  float noise = fbm(vec2(q.x * 4.0 - t * 0.15, q.y * 12.0));
+  beam *= 0.7 + noise * 0.8;
+
+  float shafts = pow(max(0.0, 1.0 - abs(sin(ang * 14.0 + t * 0.2))), 8.0);
+  beam += shafts * 0.25 / (1.0 + dist * 2.0);
+
+  float fog = fbm(p * 2.0 + vec2(0.0, -t * 0.04));
+  fog *= 0.08;
+
+  float dust = step(0.996, fbm(p * 35.0 + t * 0.03));
+  dust *= beam * 2.0;
+
+  col += vec3(1.0) * beam * 1.5;
+  col += vec3(1.0) * fog;
+  col += vec3(1.0) * dust;
+
+  float reveal = smoothstep(0.05, 0.60, beam);
+  float tx = texture2D(txt, vec2(uv.x, 1.0 - uv.y)).r * reveal;
+  col += vec3(tx) * 3.0;
+
+  // CRITICAL TUNING: Make unlit areas completely black, and boost light visibility
+  vec3 finalColor = col / (1.0 + col);
+  
+  // Ambient visibility minimum fallback (0.02) so you can vaguely see shapes if desired,
+  // or set cleanly to 0.0 for pure cinematic blindness.
+  gl_FragColor = vec4(clamp(finalColor * 4.0, 0.015, 1.0), 1.0);
+}
+`;
+
+function sh(type, src) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  return s;
+}
+
+const pr = gl.createProgram();
+gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs));
+gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs));
+gl.linkProgram(pr);
+gl.useProgram(pr);
+
+const buffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+
+const loc = gl.getAttribLocation(pr, "p");
+gl.enableVertexAttribArray(loc);
+gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+// Built-in text rendering texture setup
+const tc = document.createElement("canvas");
+tc.width = 2048;
+tc.height = 1024;
+const x = tc.getContext("2d");
+x.fillStyle = "black";
+x.fillRect(0, 0, tc.width, tc.height);
+x.fillStyle = "white";
+x.textAlign = "center";
+x.font = "bold 96px Arial";
+["The future belongs", "to those who build", "it."].forEach((s, i) => x.fillText(s, 1024, 420 + i * 120));
+
+const tex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, tex);
+gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, tc);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+function resizeGL() {
+  canvasGL.width = window.innerWidth * Math.min(window.devicePixelRatio, 2);
+  canvasGL.height = window.innerHeight * Math.min(window.devicePixelRatio, 2);
+  gl.viewport(0, 0, canvasGL.width, canvasGL.height);
+}
+
+
+/* =============================================================================
+   3. WINDOW SYSTEM & DATA
+   ============================================================================= */
+const cliData = [
+  { title: "Miller", content: "mlr --csv cat file.csv" },
+  { title: "jq", content: "jq '.name' file.json" },
+  { title: "grep", content: "grep -R 'password' ." }
+];
+
+const netData = [
+  { title: "Nmap", content: "nmap -sV 192.168.1.1" },
+  { title: "Ping", content: "ping google.com" }
+];
+
+const linuxData = [
+  { title: "Find", content: "find / -name test.txt" },
+  { title: "lsblk", content: "lsblk -f" }
+];
+
+const webData = [
+  { title: "Flexbox", content: "display:flex;" },
+  { title: "Grid", content: "display:grid;" }
+];
+
+let zIndexCounter = 100;
+
+function openWindow(title, data) {
+  let win = document.createElement("div");
+  win.className = "window";
+  win.style.left = 260 + Math.random() * 200 + "px";
+  win.style.top = 100 + Math.random() * 100 + "px";
+
+  win.innerHTML = `
+    <div class="titlebar">
+      <span>${title}</span>
+      <span class="close">✕</span>
+    </div>
+    <div class="content">
+      ${data.map(item => `
+        <div class="note">
+          <h3>${item.title}</h3>
+          <pre>${item.content}</pre>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  document.body.appendChild(win);
+  win.querySelector(".close").onclick = () => win.remove();
+  makeDraggable(win);
+}
+
+function makeDraggable(el) {
+  const title = el.querySelector(".titlebar");
+  let x = 0, y = 0, px = 0, py = 0;
+
+  title.onmousedown = (e) => {
+    el.style.zIndex = ++zIndexCounter;
+    px = e.clientX;
+    py = e.clientY;
+
+    document.onmousemove = (e) => {
+      x = px - e.clientX;
+      y = py - e.clientY;
+      px = e.clientX;
+      py = e.clientY;
+      el.style.top = (el.offsetTop - y) + "px";
+      el.style.left = (el.offsetLeft - x) + "px";
+    };
+
+    document.onmouseup = () => {
+      document.onmousemove = null;
+    };
+  };
+}
+
+
+/* =============================================================================
+   4. BACKGROUND NETWORK INTERACTION CANVAS
+   ============================================================================= */
+const net = document.getElementById("network");
+const nctx = net.getContext("2d");
+
+function resizeNetwork() {
+  net.width = window.innerWidth;
+  net.height = window.innerHeight;
+}
+
+const nodes = [];
+for(let i=0; i<70; i++) {
+  nodes.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    vx: (Math.random() - .5) * 0.5,
+    vy: (Math.random() - .5) * 0.5
+  });
+}
+
+function animateNetwork() {
+  nctx.clearRect(0, 0, net.width, net.height);
+
+  for(let a of nodes) {
+    a.x += a.vx;
+    a.y += a.vy;
+
+    if(a.x < 0 || a.x > net.width) a.vx *= -1;
+    if(a.y < 0 || a.y > net.height) a.vy *= -1;
+
+    nctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+    nctx.fillRect(a.x, a.y, 2, 2);
+
+    for(let b of nodes) {
+      let dx = a.x - b.x;
+      let dy = a.y - b.y;
+      let dist = Math.sqrt(dx * dx + dy * dy);
+
+      if(dist < 140) {
+        nctx.strokeStyle = "rgba(255,255,255,.15)";
+        nctx.beginPath();
+        nctx.moveTo(a.x, a.y);
+        nctx.lineTo(b.x, b.y);
+        nctx.stroke();
+      }
+    }
+  }
+}
+
+
+/* =============================================================================
+   5. RESIZE COORDINATOR & GLOBAL ANIMATION LOOP
+   ============================================================================= */
+function handleResize() {
+  resizeGL();
+  resizeNetwork();
+}
+window.onresize = handleResize;
+handleResize();
+
+function mainLoop(timestamp) {
+  // Smoothly blend mouse movement
+  mx += (txm - mx) * 0.08;
+  my += (tym - my) * 0.08;
+
+  // Process WebGL Light calculations
+  gl.uniform2f(gl.getUniformLocation(pr, "r"), canvasGL.width, canvasGL.height);
+  gl.uniform2f(gl.getUniformLocation(pr, "m"), mx, my);
+  gl.uniform1f(gl.getUniformLocation(pr, "t"), timestamp * 0.001);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+  // Run underlying system node graphics
+  animateNetwork();
+
+  requestAnimationFrame(mainLoop);
+}
+requestAnimationFrame(mainLoop);
+</script>
+
+</body>
+</html>
+
+```
