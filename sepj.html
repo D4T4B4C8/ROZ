@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>September Jewellery Profit</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141110;
+    --panel-line:#3a3128;
+    --gold:#cda653;
+    --gold-soft:#e8d5a3;
+    --cream:#f3ecdd;
+    --cream-dim:#a99f8d;
+    --credit:#6b9e78;
+    --row-size:1rem;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; min-height:100vh;
+    font-family:'Poppins', sans-serif;
+    background: radial-gradient(circle at 50% -10%, #2a221b 0%, var(--ink) 55%), var(--ink);
+    color:var(--cream);
+    padding:40px 20px 80px;
+  }
+  .topbar{
+    max-width:900px; margin:0 auto 10px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .back-link{
+    font-size:0.82rem; letter-spacing:0.04em; color:var(--cream-dim);
+    text-decoration:none; border:1px solid var(--panel-line);
+    padding:8px 16px; border-radius:999px;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .back-link:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .zoom-controls{ display:flex; gap:6px; }
+  .zoom-controls button{
+    font-family:'Poppins', sans-serif; font-size:0.78rem; font-weight:500;
+    color:var(--gold-soft); background:#1d1815; border:1px solid var(--panel-line);
+    padding:8px 14px; border-radius:999px; cursor:pointer;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .zoom-controls button:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .page-title{ max-width:900px; margin:0 auto 6px; text-align:center; }
+  .page-title h1{
+    font-family:'Cormorant Garamond', serif; font-weight:600;
+    font-size:clamp(1.9rem, 4.2vw, 2.5rem); color:var(--gold-soft); margin:0 0 6px;
+  }
+  .page-title p{ margin:0; font-size:0.8rem; letter-spacing:0.14em; color:var(--cream-dim); }
+  .summary-strip{
+    max-width:900px; margin:26px auto 34px; display:flex;
+    justify-content:center; gap:14px; flex-wrap:wrap;
+  }
+  .summary-pill{
+    border:1px solid var(--panel-line); border-radius:14px; padding:12px 22px;
+    background:linear-gradient(160deg, #201a15, #171310); text-align:center; min-width:120px;
+  }
+  .summary-pill .label{ font-size:0.68rem; letter-spacing:0.1em; color:var(--cream-dim); margin-bottom:4px; }
+  .summary-pill .value{
+    font-family:'Cormorant Garamond', serif; font-size:1.3rem; font-weight:600; color:var(--gold-soft);
+  }
+  .section-heading{
+    max-width:900px; margin:26px auto 8px; padding:0 4px;
+    font-family:'Cormorant Garamond', serif; font-weight:600; font-size:1.2rem; color:var(--gold-soft);
+  }
+  .ledger{
+    max-width:900px; margin:0 auto 18px;
+    background:linear-gradient(160deg, #201a15, #171310);
+    border:1px solid var(--panel-line); border-radius:20px; padding:8px 0 0;
+    box-shadow:0 14px 30px -18px rgba(0,0,0,0.75); overflow:auto;
+  }
+  table{ width:100%; border-collapse:collapse; font-size:var(--row-size); }
+  thead th{
+    font-size:0.72rem; letter-spacing:0.08em; color:var(--cream-dim); font-weight:500;
+    text-align:left; padding:14px 18px; border-bottom:1px solid var(--panel-line); white-space:nowrap;
+  }
+  thead th.num, td.num{ text-align:right; }
+  tbody td{
+    padding:12px 18px; border-bottom:1px solid rgba(58,49,40,0.5);
+    font-variant-numeric:tabular-nums; color:var(--cream); white-space:nowrap;
+  }
+  tbody tr:last-of-type td{ border-bottom:none; }
+  tbody tr:nth-child(even){ background:rgba(243,236,221,0.02); }
+  tbody tr:hover{ background:rgba(205,166,83,0.06); }
+  td.credit{ color:var(--credit); }
+  td.empty{ text-align:center; color:var(--cream-dim); padding:22px; }
+  tfoot td{
+    padding:16px 18px; font-family:'Cormorant Garamond', serif; font-size:1.1rem;
+    font-weight:600; color:var(--gold-soft); border-top:1px solid var(--gold);
+    background:rgba(205,166,83,0.06);
+  }
+  @media (max-width:560px){
+    thead th, tbody td, tfoot td{ padding:10px 12px; }
+    .summary-pill{ min-width:100px; padding:10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a class="back-link" href="list.html">&larr; Monthly Report</a>
+    <div class="zoom-controls">
+      <button onclick="zoomOut()">A&minus;</button>
+      <button onclick="resetZoom()">Reset</button>
+      <button onclick="zoomIn()">A+</button>
+    </div>
+  </div>
+
+  <div class="page-title">
+    <h1>September Jewellery Profit</h1>
+    <p>Roz Jewellers &middot; Business Records</p>
+  </div>
+
+  <div class="summary-strip">
+    <div class="summary-pill"><div class="label">ENTRIES</div><div class="value">89</div></div>
+    <div class="summary-pill"><div class="label">TOTAL</div><div class="value">₹364,687.00</div></div>
+  </div>
+
+
+  <div class="ledger">
+    <table>
+      <thead><tr><th>S_NO</th><th>date</th><th>invoice_no</th><th>name</th><th>e_order_id</th><th>order_id</th><th class="num">amount</th><th>expense</th><th class="num">p_price</th><th class="num">shipping</th><th class="num">profit</th><th>status</th></tr></thead>
+      <tbody><tr><td>1</td><td>2026-09-01</td><td>2026-27/111</td><td>sajini</td><td>4161500595</td><td>911</td><td class="num">₹3,131.00</td><td></td><td class="num">₹950.00</td><td class="num">₹778.80</td><td class="num">₹1,402.20</td><td>OK</td></tr><tr><td>2</td><td>2026-09-02</td><td>2026-27/112</td><td>nimra</td><td>4161854971</td><td>300</td><td class="num">₹3,585.00</td><td></td><td class="num">₹980.00</td><td class="num">₹778.80</td><td class="num">₹1,826.20</td><td>OK</td></tr><tr><td>3</td><td>2026-09-02</td><td>2026-27/113</td><td>myshu</td><td>4162490628</td><td>813767</td><td class="num">₹3,425.00</td><td></td><td class="num">₹770.00</td><td class="num">₹618.32</td><td class="num">₹2,036.68</td><td>OK</td></tr><tr><td>4</td><td>2026-09-02</td><td>2026-27/114</td><td>rupal</td><td>4162501202</td><td>869</td><td class="num">₹2,801.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹1,422.68</td><td>OK</td></tr><tr><td>5</td><td>2026-09-02</td><td>2026-27/115</td><td>ramya</td><td>4162680066</td><td>924</td><td class="num">₹5,588.00</td><td></td><td class="num">₹1,500.00</td><td class="num">₹778.80</td><td class="num">₹3,309.20</td><td>OK</td></tr><tr><td>6</td><td>2026-09-02</td><td>2026-27/116</td><td>priti</td><td>4162810906</td><td>274</td><td class="num">₹1,965.00</td><td></td><td class="num">₹360.00</td><td class="num">₹513.30</td><td class="num">₹1,091.70</td><td>OK</td></tr><tr><td>7</td><td>2026-09-02</td><td>2026-27/117</td><td>thamil</td><td>4162812544</td><td>115</td><td class="num">₹3,527.00</td><td></td><td class="num">₹1,254.00</td><td class="num">₹368.16</td><td class="num">₹1,904.84</td><td>OK</td></tr><tr><td>8</td><td>2026-09-02</td><td>2026-27/118</td><td>monica</td><td>4162493691</td><td>869</td><td class="num">₹2,756.00</td><td></td><td class="num">₹760.00</td><td class="num">₹1,144.60</td><td class="num">₹851.40</td><td>OK</td></tr><tr><td>9</td><td>2026-09-03</td><td>2026-27/119</td><td>yasmin</td><td>4163099775</td><td>141</td><td class="num">₹5,373.00</td><td></td><td class="num">₹1,540.00</td><td class="num">₹778.80</td><td class="num">₹3,054.20</td><td>OK</td></tr><tr><td>10</td><td>2026-09-03</td><td>2026-27/120</td><td>fabeha</td><td>4163427169</td><td>907</td><td class="num">₹3,562.00</td><td></td><td class="num">₹950.00</td><td class="num">₹778.80</td><td class="num">₹1,833.20</td><td>OK</td></tr><tr><td>11</td><td>2026-09-03</td><td>2026-27/121</td><td>kamakshi</td><td>4163906768</td><td>503954</td><td class="num">₹5,887.00</td><td></td><td class="num">₹1,850.00</td><td class="num">₹778.80</td><td class="num">₹3,258.20</td><td>OK</td></tr><tr><td>12</td><td>2026-09-04</td><td>2026-27/122</td><td>akash</td><td>4164603906</td><td>275</td><td class="num">₹1,941.00</td><td></td><td class="num">₹360.00</td><td class="num">₹798.86</td><td class="num">₹782.14</td><td>OK</td></tr><tr><td>13</td><td>2026-09-07</td><td>2026-27/123</td><td>kelly</td><td>4166148665</td><td>905</td><td class="num">₹3,753.00</td><td></td><td class="num">₹1,000.00</td><td class="num">₹618.32</td><td class="num">₹2,134.68</td><td>OK</td></tr><tr><td>14</td><td>2026-09-06</td><td>2026-27/124</td><td>bipasha</td><td>4166445362</td><td>632</td><td class="num">₹1,892.00</td><td></td><td class="num">₹380.00</td><td class="num">₹513.30</td><td class="num">₹998.70</td><td>OK</td></tr><tr><td>15</td><td>2026-09-07</td><td>2026-27/125</td><td>sarah</td><td>4166538421</td><td>771766768762806</td><td class="num">₹7,672.00</td><td></td><td class="num">₹1,516.00</td><td class="num">₹778.80</td><td class="num">₹5,377.20</td><td>OK</td></tr><tr><td>16</td><td>2026-09-06</td><td>2026-27/126</td><td>leela</td><td>4166798824</td><td>293</td><td class="num">₹1,093.00</td><td></td><td class="num">₹240.00</td><td class="num">₹513.30</td><td class="num">₹339.70</td><td>OK</td></tr><tr><td>17</td><td>2026-09-07</td><td>2026-27/127</td><td>rosie</td><td>4167118720</td><td>900</td><td class="num">₹3,286.00</td><td></td><td class="num">₹1,000.00</td><td class="num">₹618.32</td><td class="num">₹1,667.68</td><td>OK</td></tr><tr><td>18</td><td>2026-09-07</td><td>2026-27/128</td><td>sharmila</td><td>4167312702</td><td>945</td><td class="num">₹2,387.00</td><td></td><td class="num">₹560.00</td><td class="num">₹513.30</td><td class="num">₹1,313.70</td><td>OK</td></tr><tr><td>19</td><td>2026-09-08</td><td>2026-27/129</td><td>amy</td><td>4167458085</td><td>869</td><td class="num">₹3,190.00</td><td></td><td class="num">₹760.00</td><td class="num">₹611.24</td><td class="num">₹1,818.76</td><td>OK</td></tr><tr><td>20</td><td>2026-09-07</td><td>2026-27/130</td><td>deepali</td><td>4167876370</td><td>869</td><td class="num">₹3,158.00</td><td></td><td class="num">₹760.00</td><td class="num">₹407.10</td><td class="num">₹1,990.90</td><td>OK</td></tr><tr><td>21</td><td>2026-09-08</td><td>2026-27/131</td><td>alephia</td><td>4168605072</td><td>112</td><td class="num">₹3,525.00</td><td></td><td class="num">₹1,223.00</td><td class="num">₹778.80</td><td class="num">₹1,523.20</td><td>OK</td></tr><tr><td>22</td><td>2026-09-08</td><td>2026-27/132</td><td>lucky</td><td>4168680546</td><td>347</td><td class="num">₹4,193.00</td><td></td><td class="num">₹1,330.00</td><td class="num">₹481.44</td><td class="num">₹2,381.56</td><td>OK</td></tr><tr><td>23</td><td>2026-09-08</td><td>2026-27/133</td><td>manoj</td><td>0</td><td>935</td><td class="num">₹3,650.00</td><td></td><td class="num">₹1,150.00</td><td class="num">₹778.80</td><td class="num">₹1,721.20</td><td>OK</td></tr><tr><td>24</td><td>2026-09-09</td><td>2026-27/134</td><td>swapnil</td><td>4168638743</td><td>932</td><td class="num">₹4,233.00</td><td></td><td class="num">₹1,150.00</td><td class="num">₹778.80</td><td class="num">₹2,304.20</td><td>OK</td></tr><tr><td>25</td><td>2026-09-10</td><td>2026-27/135</td><td>nikki</td><td>4170407946</td><td>829</td><td class="num">₹2,292.00</td><td></td><td class="num">₹420.00</td><td class="num">₹513.30</td><td class="num">₹1,358.70</td><td>OK</td></tr><tr><td>26</td><td>2026-09-10</td><td>2026-27/136</td><td>kamakshi</td><td>4169487895</td><td>950</td><td class="num">₹3,555.00</td><td></td><td class="num">₹1,100.00</td><td class="num">₹778.80</td><td class="num">₹1,676.20</td><td>OK</td></tr><tr><td>27</td><td>2026-09-11</td><td>2026-27/137</td><td>tasnim</td><td>4170241799</td><td>403</td><td class="num">₹2,177.00</td><td></td><td class="num">₹385.00</td><td class="num">₹513.30</td><td class="num">₹1,278.70</td><td>OK</td></tr><tr><td>28</td><td>2026-09-10</td><td>2026-27/138</td><td>amandeep</td><td>4170453148</td><td>703</td><td class="num">₹3,072.00</td><td></td><td class="num">₹720.00</td><td class="num">₹667.88</td><td class="num">₹1,684.12</td><td>OK</td></tr><tr><td>29</td><td>2026-09-11</td><td>2026-27/139</td><td>supreet</td><td>4171550922</td><td>868</td><td class="num">₹2,966.00</td><td></td><td class="num">₹760.00</td><td class="num">₹407.10</td><td class="num">₹1,798.90</td><td>OK</td></tr><tr><td>30</td><td>2026-09-11</td><td>2026-27/140</td><td>sonal</td><td>4171635498</td><td>913289</td><td class="num">₹4,657.00</td><td></td><td class="num">₹1,236.00</td><td class="num">₹481.44</td><td class="num">₹2,939.56</td><td>OK</td></tr><tr><td>31</td><td>2026-09-12</td><td>2026-27/141</td><td>aaliya</td><td>4172209586</td><td>834</td><td class="num">₹2,305.00</td><td></td><td class="num">₹420.00</td><td class="num">₹513.30</td><td class="num">₹1,371.70</td><td>OK</td></tr><tr><td>32</td><td>2026-09-12</td><td>2026-27/142</td><td>anusha</td><td>4171931415</td><td>957</td><td class="num">₹2,560.00</td><td></td><td class="num">₹920.00</td><td class="num">₹618.32</td><td class="num">₹1,021.68</td><td>OK</td></tr><tr><td>33</td><td>2026-09-12</td><td>2026-27/143</td><td>sanchita</td><td>4172657636</td><td>868</td><td class="num">₹3,413.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹2,034.68</td><td>OK</td></tr><tr><td>34</td><td>2026-09-13</td><td>2026-27/144</td><td>prabhat</td><td>4173270886</td><td>869</td><td class="num">₹2,815.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹1,436.68</td><td>OK</td></tr><tr><td>35</td><td>2026-09-13</td><td>2026-27/145</td><td>harpreet</td><td>4173350950</td><td>916</td><td class="num">₹3,559.00</td><td></td><td class="num">₹1,000.00</td><td class="num">₹618.32</td><td class="num">₹1,940.68</td><td>OK</td></tr><tr><td>36</td><td>2026-09-14</td><td>2026-27/146</td><td>ramya</td><td>4174577728</td><td>866</td><td class="num">₹2,332.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹953.68</td><td>OK</td></tr><tr><td>37</td><td>2026-09-15</td><td>2026-27/147</td><td>kasturi</td><td>4174873124</td><td>868</td><td class="num">₹3,415.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹2,036.68</td><td>OK</td></tr><tr><td>38</td><td>2026-09-15</td><td>2026-27/148</td><td>christina</td><td>4175226170</td><td>869</td><td class="num">₹2,332.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹953.68</td><td>OK</td></tr><tr><td>39</td><td>2026-09-15</td><td>2026-27/149</td><td>shravanthi</td><td>4173229521</td><td>451922410</td><td class="num">₹13,894.00</td><td></td><td class="num">₹4,650.00</td><td class="num">₹1,467.92</td><td class="num">₹7,776.08</td><td>OK</td></tr><tr><td>40</td><td>2026-09-17</td><td>2026-27/150</td><td>rajinder</td><td>4175381077</td><td>208</td><td class="num">₹2,129.00</td><td></td><td class="num">₹520.00</td><td class="num">₹368.16</td><td class="num">₹1,240.84</td><td>OK</td></tr><tr><td>41</td><td>2026-09-16</td><td>2026-27/151</td><td>naginder</td><td>4176701476</td><td>758290945943</td><td class="num">₹7,122.00</td><td></td><td class="num">₹1,565.00</td><td class="num">₹481.44</td><td class="num">₹5,075.56</td><td>OK</td></tr><tr><td>42</td><td>2026-09-17</td><td>2026-27/152</td><td>rupal</td><td>4175785273</td><td>826</td><td class="num">₹2,309.00</td><td></td><td class="num">₹420.00</td><td class="num">₹513.30</td><td class="num">₹1,375.70</td><td>OK</td></tr><tr><td>43</td><td>2026-09-17</td><td>2026-27/153</td><td>natasha</td><td>4176056701</td><td>871</td><td class="num">₹2,817.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹1,438.68</td><td>OK</td></tr><tr><td>44</td><td>2026-09-18</td><td>2026-27/154</td><td>hima</td><td>4176325569</td><td>916</td><td class="num">₹4,047.00</td><td></td><td class="num">₹1,000.00</td><td class="num">₹407.10</td><td class="num">₹2,639.90</td><td>OK</td></tr><tr><td>45</td><td>2026-09-18</td><td>2026-27/155</td><td>dr tanu</td><td>4177830978</td><td>869</td><td class="num">₹3,200.00</td><td></td><td class="num">₹760.00</td><td class="num">₹407.10</td><td class="num">₹2,032.90</td><td>OK</td></tr><tr><td>46</td><td>2026-09-18</td><td>2026-27/156</td><td>katie</td><td>4177978872</td><td>448</td><td class="num">₹2,961.00</td><td></td><td class="num">₹650.00</td><td class="num">₹618.32</td><td class="num">₹1,692.68</td><td>OK</td></tr><tr><td>47</td><td>2026-09-19</td><td>2026-27/157</td><td>gargee</td><td>4177463307</td><td>907</td><td class="num">₹3,170.00</td><td></td><td class="num">₹950.00</td><td class="num">₹778.80</td><td class="num">₹1,441.20</td><td>OK</td></tr><tr><td>48</td><td>2026-09-19</td><td>2026-27/158</td><td>sulema</td><td>4178739800</td><td>124</td><td class="num">₹3,095.00</td><td></td><td class="num">₹820.00</td><td class="num">₹778.80</td><td class="num">₹1,496.20</td><td>OK</td></tr><tr><td>49</td><td>2026-09-19</td><td>2026-27/159</td><td>naznin</td><td>4179101148</td><td>444447449</td><td class="num">₹8,845.00</td><td></td><td class="num">₹1,950.00</td><td class="num">₹778.80</td><td class="num">₹6,116.20</td><td>OK</td></tr><tr><td>50</td><td>2026-09-19</td><td>2026-27/160</td><td>yasmin</td><td>4179137164</td><td>780</td><td class="num">₹1,741.00</td><td></td><td class="num">₹309.00</td><td class="num">₹513.30</td><td class="num">₹918.70</td><td>OK</td></tr><tr><td>51</td><td>2026-09-21</td><td>2026-27/161</td><td>priya</td><td>4178960239</td><td>403</td><td class="num">₹2,184.00</td><td></td><td class="num">₹385.00</td><td class="num">₹513.30</td><td class="num">₹1,285.70</td><td>OK</td></tr><tr><td>52</td><td>2026-09-20</td><td>2026-27/162</td><td>medha</td><td>4179920414</td><td>868</td><td class="num">₹3,418.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹2,039.68</td><td>OK</td></tr><tr><td>53</td><td>2026-09-21</td><td>2026-27/163</td><td>shruti</td><td>4180712066</td><td>912916</td><td class="num">₹8,114.00</td><td></td><td class="num">₹2,000.00</td><td class="num">₹838.98</td><td class="num">₹5,275.02</td><td>OK</td></tr><tr><td>54</td><td>2026-09-19</td><td>2026-27/164</td><td>sonia</td><td>0</td><td>701</td><td class="num">₹3,362.00</td><td></td><td class="num">₹650.00</td><td class="num">₹618.32</td><td class="num">₹2,093.68</td><td>OK</td></tr><tr><td>55</td><td>2026-09-21</td><td>2026-27/165</td><td>riya</td><td>4179577973</td><td>858</td><td class="num">₹3,558.00</td><td></td><td class="num">₹950.00</td><td class="num">₹778.80</td><td class="num">₹1,829.20</td><td>OK</td></tr><tr><td>56</td><td>2026-09-22</td><td>2026-27/166</td><td>uma</td><td>4179905707</td><td>144104117</td><td class="num">₹10,074.00</td><td></td><td class="num">₹3,129.00</td><td class="num">₹482.62</td><td class="num">₹6,462.38</td><td>OK</td></tr><tr><td>57</td><td>2026-09-22</td><td>2026-27/167</td><td>usha</td><td>4180110293</td><td>914</td><td class="num">₹3,562.00</td><td></td><td class="num">₹1,000.00</td><td class="num">₹618.32</td><td class="num">₹1,943.68</td><td>OK</td></tr><tr><td>58</td><td>2026-09-22</td><td>2026-27/168</td><td>uma</td><td>4181492392</td><td>916</td><td class="num">₹3,566.00</td><td></td><td class="num">₹1,000.00</td><td class="num">₹482.62</td><td class="num">₹2,083.38</td><td>OK</td></tr><tr><td>59</td><td>2026-09-23</td><td>2026-27/169</td><td>daman</td><td>4180784033</td><td>109</td><td class="num">₹2,778.00</td><td></td><td class="num">₹680.00</td><td class="num">₹756.38</td><td class="num">₹1,341.62</td><td>OK</td></tr><tr><td>60</td><td>2026-09-23</td><td>2026-27/170</td><td>kamakshi</td><td>4181155403</td><td>783969768758704996352</td><td class="num">₹16,229.00</td><td></td><td class="num">₹4,154.00</td><td class="num">₹1,351.10</td><td class="num">₹10,723.90</td><td>OK</td></tr><tr><td>61</td><td>2026-09-23</td><td>2026-27/171</td><td>kamakshi</td><td>4182778766</td><td>871</td><td class="num">₹3,228.00</td><td></td><td class="num">₹760.00</td><td class="num">₹760.00</td><td class="num">₹1,708.00</td><td>OK</td></tr><tr><td>62</td><td>2026-09-24</td><td>2026-27/172</td><td>saman</td><td>4181904891</td><td>823933915922412</td><td class="num">₹15,926.00</td><td></td><td class="num">₹4,420.00</td><td class="num">₹1,351.10</td><td class="num">₹10,154.90</td><td>OK</td></tr><tr><td>63</td><td>2026-09-23</td><td>2026-27/173</td><td>sabeena</td><td>4182955066</td><td>912</td><td class="num">₹3,564.00</td><td></td><td class="num">₹1,000.00</td><td class="num">₹618.32</td><td class="num">₹1,945.68</td><td>OK</td></tr><tr><td>64</td><td>2026-09-24</td><td>2026-27/174</td><td>divya</td><td>4183278702</td><td>257</td><td class="num">₹1,470.00</td><td></td><td class="num">₹250.00</td><td class="num">₹513.30</td><td class="num">₹706.70</td><td>OK</td></tr><tr><td>65</td><td>2026-09-24</td><td>2026-27/175</td><td>kusumam</td><td>4183574362</td><td>968</td><td class="num">₹4,280.00</td><td></td><td class="num">₹1,090.00</td><td class="num">₹778.80</td><td class="num">₹2,411.20</td><td>OK</td></tr><tr><td>66</td><td>2026-09-25</td><td>2026-27/176</td><td>girish</td><td>4182538045</td><td>616</td><td class="num">₹1,848.00</td><td></td><td class="num">₹414.00</td><td class="num">₹407.10</td><td class="num">₹1,026.90</td><td>OK</td></tr><tr><td>67</td><td>2026-09-25</td><td>2026-27/177</td><td>brittany</td><td>4184255968</td><td>448</td><td class="num">₹2,603.00</td><td></td><td class="num">₹650.00</td><td class="num">₹618.00</td><td class="num">₹1,335.00</td><td>OK</td></tr><tr><td>68</td><td>2026-09-25</td><td>2026-27/178</td><td>anu</td><td>4184475702</td><td>825</td><td class="num">₹2,322.00</td><td></td><td class="num">₹420.00</td><td class="num">₹513.30</td><td class="num">₹1,388.70</td><td>OK</td></tr><tr><td>69</td><td>2026-09-24</td><td>2026-27/179</td><td>preeti</td><td>4182050293</td><td>452</td><td class="num">₹5,748.00</td><td></td><td class="num">₹1,700.00</td><td class="num">₹1,089.14</td><td class="num">₹2,958.86</td><td>OK</td></tr><tr><td>70</td><td>2026-09-25</td><td>2026-27/180</td><td>josline</td><td>4184720146</td><td>619</td><td class="num">₹2,149.00</td><td></td><td class="num">₹492.00</td><td class="num">₹778.80</td><td class="num">₹878.20</td><td>OK</td></tr><tr><td>71</td><td>2026-09-26</td><td>2026-27/181</td><td>bindi</td><td>4183544983</td><td>288119294292</td><td class="num">₹6,258.00</td><td></td><td class="num">₹1,654.00</td><td class="num">₹778.80</td><td class="num">₹3,825.20</td><td>OK</td></tr><tr><td>72</td><td>2026-09-26</td><td>2026-27/182</td><td>deepal</td><td>4185007538</td><td>869</td><td class="num">₹3,234.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹1,855.68</td><td>OK</td></tr><tr><td>73</td><td>2026-09-26</td><td>2026-27/183</td><td>priyanka</td><td>4185036516</td><td>916</td><td class="num">₹3,571.00</td><td></td><td class="num">₹1,000.00</td><td class="num">₹618.32</td><td class="num">₹1,952.68</td><td>OK</td></tr><tr><td>74</td><td>2026-09-26</td><td>2026-27/184</td><td>anita</td><td>4185159854</td><td>927</td><td class="num">₹3,950.00</td><td></td><td class="num">₹1,040.00</td><td class="num">₹778.80</td><td class="num">₹2,131.20</td><td>OK</td></tr><tr><td>75</td><td>2026-09-26</td><td>2026-27/185</td><td>manvinder</td><td>4185237950</td><td>870</td><td class="num">₹3,230.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹1,851.68</td><td>OK</td></tr><tr><td>76</td><td>2026-09-26</td><td>2026-27/186</td><td>ashifa</td><td>0</td><td>150</td><td class="num">₹6,012.00</td><td></td><td class="num">₹1,300.00</td><td class="num">₹778.80</td><td class="num">₹3,933.20</td><td>OK</td></tr><tr><td>77</td><td>2026-09-26</td><td>2026-27/187</td><td>arpita</td><td>4184146159</td><td>444</td><td class="num">₹2,449.00</td><td></td><td class="num">₹650.00</td><td class="num">₹618.32</td><td class="num">₹1,180.68</td><td>OK</td></tr><tr><td>78</td><td>2026-09-27</td><td>2026-27/188</td><td>kotomi</td><td>4184350643</td><td>403</td><td class="num">₹2,199.00</td><td></td><td class="num">₹385.00</td><td class="num">₹631.30</td><td class="num">₹1,182.70</td><td>OK</td></tr><tr><td>79</td><td>2026-09-27</td><td>2026-27/189</td><td>manjeet</td><td>4186222894</td><td>869</td><td class="num">₹2,834.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹1,455.68</td><td>OK</td></tr><tr><td>80</td><td>2026-09-27</td><td>2026-27/190</td><td>vidya</td><td>4184667159</td><td>916</td><td class="num">₹4,077.00</td><td></td><td class="num">₹1,000.00</td><td class="num">₹618.32</td><td class="num">₹2,458.68</td><td>OK</td></tr><tr><td>81</td><td>2026-09-27</td><td>2026-27/191</td><td>vamsi</td><td>4186327064</td><td>916</td><td class="num">₹4,074.00</td><td></td><td class="num">₹1,000.00</td><td class="num">₹618.32</td><td class="num">₹2,455.68</td><td>OK</td></tr><tr><td>82</td><td>2026-09-27</td><td>2026-27/192</td><td>syed</td><td>4186609314</td><td>921</td><td class="num">₹5,642.00</td><td></td><td class="num">₹1,500.00</td><td class="num">₹778.80</td><td class="num">₹3,363.20</td><td>OK</td></tr><tr><td>83</td><td>2026-09-28</td><td>2026-27/193</td><td>shweta</td><td>4186976870</td><td>865</td><td class="num">₹3,234.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹1,855.68</td><td>OK</td></tr><tr><td>84</td><td>2026-09-28</td><td>2026-27/194</td><td>savita</td><td>4185770959</td><td>869</td><td class="num">₹3,215.00</td><td></td><td class="num">₹760.00</td><td class="num">₹407.10</td><td class="num">₹2,047.90</td><td>OK</td></tr><tr><td>85</td><td>2026-09-29</td><td>2026-27/195</td><td>nilesh</td><td>4186314753</td><td>868613</td><td class="num">₹4,362.00</td><td></td><td class="num">₹1,264.00</td><td class="num">₹778.80</td><td class="num">₹2,319.20</td><td>OK</td></tr><tr><td>86</td><td>2026-09-30</td><td>2026-27/196</td><td>preethi</td><td>4187208485</td><td>869</td><td class="num">₹2,832.00</td><td></td><td class="num">₹760.00</td><td class="num">₹618.32</td><td class="num">₹1,453.68</td><td>OK</td></tr><tr><td>87</td><td>2026-09-30</td><td>2026-27/197</td><td>aisha</td><td>4189328090</td><td>891922</td><td class="num">₹9,169.00</td><td></td><td class="num">₹2,600.00</td><td class="num">₹1,100.00</td><td class="num">₹5,469.00</td><td>OK</td></tr><tr><td>88</td><td>2026-09-30</td><td>2026-27/198</td><td>lakshmi</td><td>4187727629</td><td>913921</td><td class="num">₹9,704.00</td><td></td><td class="num">₹2,500.00</td><td class="num">₹1,100.00</td><td class="num">₹6,104.00</td><td>OK</td></tr><tr><td>89</td><td>2026-09-30</td><td>2026-27/199</td><td>rano</td><td>4187862903</td><td>621</td><td class="num">₹2,305.00</td><td></td><td class="num">₹555.00</td><td class="num">₹760.00</td><td class="num">₹990.00</td><td>OK</td></tr></tbody>
+      <tfoot><tr><td></td><td></td><td></td><td></td><td></td><td>TOTAL</td><td class="num">₹364,687.00</td><td>63623</td><td class="num">₹95,130.00</td><td class="num">₹60,004.50</td><td class="num">₹145,929.50</td><td></td></tr></tfoot>
+    </table>
+  </div>
+
+  <script>
+    let fontScale = 1;
+    function applyScale() {
+      document.querySelector(':root').style.setProperty('--row-size', (1 * fontScale) + 'rem');
+    }
+    function zoomIn() { fontScale = Math.min(fontScale + 0.1, 1.8); applyScale(); }
+    function zoomOut() { fontScale = Math.max(fontScale - 0.1, 0.7); applyScale(); }
+    function resetZoom() { fontScale = 1; applyScale(); }
+  </script>
+</body>
+</html>
